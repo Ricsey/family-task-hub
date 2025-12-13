@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]>=0.124.2",
+    "uvicorn>=0.38.0",
 ]
 
 [tool.ruff]
@@ -112,15 +113,10 @@ disallow_any_generics = true
 disallow_any_expr = true
 
 plugins = [
-    "pydantic.mypy",
+    { module = "pydantic.mypy", init_for_is_provided = true, warn_untyped_fields = true }
 ]
 
 exclude = [
     "migrations/",
     "venv/",
 ]
-
-# This is the separate configuration table for the pydantic plugin
-[tool.mypy.plugins.pydantic]
-init_for_is_provided = true
-warn_untyped_fields = true
