@@ -17,4 +17,6 @@
     "python.testing.autoTestDiscoverOnSaveEnabled": true,
     "python.analysis.typeCheckingMode": "off",
     "python.languageServer": "None",
+
+    "editor.inlayHints.enabled": "offUnlessPressed"
 }
