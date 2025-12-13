@@ -3,7 +3,7 @@
 {
   "name": "Family Tasks Hub Dev Container",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
-  "remoteUser": "vscode",
+  "remoteUser": "root",
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
     8000
