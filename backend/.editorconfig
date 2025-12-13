@@ -1,0 +1,36 @@
+# top-most EditorConfig file
+root = true
+
+[*]
+# Core settings applied to all files
+charset = utf-8
+indent_style = space
+indent_size = 4
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 88 # Matches Black formatter default
+
+[*.py]
+# Python specific settings (PEP 8 standard)
+indent_size = 4
+max_line_length = 88 # Enforce Black's default line length
+
+[*.md]
+# Markdown files
+trim_trailing_whitespace = false
+max_line_length = off
+
+[{.gitignore, .dockerignore, LICENSE}]
+# Files where we might want mixed settings
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+[{requirements.txt, *.in}]
+# Poetry/Pip/Uvicorn configuration files
+indent_style = space
+indent_size = 4
+
+[*.json]
+# JSON files (often used for data or configuration)
+indent_size = 2

@@ -1,0 +1,126 @@
+[project]
+name = "family-tasks-hub-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.124.2",
+]
+
+[tool.ruff]
+# The directory containing the code to analyze. Assumes your code is in 'src' or the root.
+target-version = "py313"
+line-length = 88  # Matches Black's default line length (and your .editorconfig)
+
+# Exclude common and configuration files from linting
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    "**/.git",
+    "**/.hg",
+    "**/.mypy_cache",
+    "**/.pytest_cache",
+    "**/.ruff_cache",
+    "**/.svn",
+    "__pypackages__",
+    "migrations",  # Exclude SQLAlchemy/Alembic migration files
+    "venv",
+]
+
+[tool.ruff.lint]
+# Enable all highly recommended rules, plus rules tailored for FastAPI development:
+# F - Pyflakes (general code quality)
+# E, W - pycodestyle (PEP 8)
+# I - Isort (import sorting)
+# N - Naming conventions
+# C4 - Comprehension check
+# B - Bugbear (common pitfalls)
+# A - Built-in shadowing (e.g., naming a variable 'id')
+# P - flake8-implicit-str-concat
+# UP - pyupgrade (modern Python syntax)
+# SIM - flake8-simplify
+# RUF - Ruff-specific rules
+# ERA - eradicate (commented out code)
+select = [
+    "F", "E", "W", "I", "N", "C4", "B", "A", "P", "UP", "SIM", "RUF", "ERA",
+]
+
+# Disable specific rules for flexibility or common FastAPI patterns:
+ignore = [
+    # N805: First argument of a class method should be named cls
+    # Often disabled if using custom mixins or decorators that alter method signatures.
+    "N805",
+
+    # D100, D101, D102, D103, D104, D105, D106, D107: Pydocstyle rules
+    # Disabled by default, but you should enable them if you require docstrings.
+    # E.g., include: "D", then exclude specific ones you don't need.
+    "D",
+]
+
+[tool.ruff.lint.isort]
+# Best practice is to enable Isort, which automatically sorts your imports
+# This configuration matches Black's import style.
+known-first-party = ["backend", "src"] # Replace with your project module names
+force-single-line = false
+case-sensitive = true
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore Naming rules (N) in test files, as tests often use simple names like 'client' or 'res'
+"tests/*" = ["N"]
+
+# Ignore line length in __init__.py files
+"__init__.py" = ["E501"]
+
+[tool.black]
+line-length = 88
+target-version = ['py313'] # Match your Ruff target version
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.ruff_cache
+  | \.venv
+  | \migrations
+)/
+'''
+
+
+[tool.mypy]
+python_version = "3.13"
+warn_unused_ignores = true
+show_error_codes = true
+pretty = true
+
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+warn_untyped_fields = true
+no_implicit_optional = true
+disallow_untyped_calls = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+implicit_reexport = false
+warn_return_any = true
+disallow_any_unimported = true
+disallow_any_decorated = true
+disallow_any_explicit = true
+disallow_any_generics = true
+disallow_any_expr = true
+
+plugins = [
+    "pydantic.mypy",
+]
+
+exclude = [
+    "migrations/",
+    "venv/",
+]
+
+# This is the separate configuration table for the pydantic plugin
+[tool.mypy.plugins.pydantic]
+init_for_is_provided = true
+warn_untyped_fields = true
