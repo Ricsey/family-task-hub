@@ -1,3 +1,2 @@
-# curl -LsSf https://astral.sh/uv/install.sh | sh
 uv sync --frozen
-uv run pre-commit install
+unset VIRTUAL_ENV # This conflicts with uv's virtualenv management
