@@ -30,7 +30,7 @@
         "shardulm94.trailing-spaces",
         "tamasfe.even-better-toml",
         "redhat.vscode-yaml",
-        "ms-python.mypy-type-checker",
+        "astral-sh.ty",
         "charliermarsh.ruff"
       ]
     }
