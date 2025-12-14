@@ -2,7 +2,9 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
   "name": "Family Tasks Hub Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "backend",
+  "workspaceFolder": "/workspace",
   "remoteUser": "root",
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
