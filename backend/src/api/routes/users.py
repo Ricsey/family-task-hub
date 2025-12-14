@@ -3,7 +3,7 @@ import uuid
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
-from src.core.deps import SessionDep
+from src.api.deps import SessionDep
 from src.models.users import User, UserCreate
 
 router = APIRouter(prefix="/users", tags=["users"])

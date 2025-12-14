@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, create_engine
 
-from src.core.settings import settings
+from src.core.config import settings
 
 engine = create_engine(settings.database_url, echo=True)
 
