@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "tamasfe.even-better-toml",
+        "redhat.vscode-yaml",
+        "usernamehw.errorlens",
+    ]
+}
