@@ -1,0 +1,28 @@
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    app_name: str = "My FastAPI Application"
+    admin_email: str = "noreply@company.com"
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
+
+    POSTGRES_DB: str = Field(init=False)
+    POSTGRES_USER: str = Field(init=False)
+    POSTGRES_PASSWORD: str = Field(init=False)
+    POSTGRES_SERVER: str = Field("db", init=False)  # Default value for Docker setup
+    POSTGRES_PORT: str = Field("5432", init=False)
+
+    @property
+    def database_url(self) -> str:
+        return (
+            f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
+            f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
+
+
+settings = Settings()

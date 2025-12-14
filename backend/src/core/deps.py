@@ -4,6 +4,7 @@ from fastapi import Depends
 from sqlmodel import Session
 
 from src.core.db import engine
+from src.core.settings import settings
 
 
 def get_session():
@@ -12,3 +13,8 @@ def get_session():
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
+
+
+# @lru_cache
+def get_config():
+    return settings
