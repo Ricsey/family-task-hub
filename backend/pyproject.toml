@@ -1,0 +1,15 @@
+[project]
+name = "family-tasks-hub-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.124.2",
+    "uvicorn>=0.38.0",
+]
+
+[dependency-groups]
+dev = [
+    "ty>=0.0.1a34",
+]
