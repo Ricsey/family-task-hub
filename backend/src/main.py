@@ -1,8 +1,20 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from src.api.routes.users import router as users_router
+from src.core.db import create_db_and_tables
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/healthcheck")
+async def healthcheck():
+    return {"status": "ok"}
+
+
+app.include_router(users_router)

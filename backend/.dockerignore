@@ -1,22 +1,37 @@
-__pycache__
+# ==================================
+# Python Build Artifacts
+# ==================================
+**/__pycache__
 *.pyc
 *.pyo
 *.pyd
 .Python
-.env*
 pip-log.txt
 pip-delete-this-directory.txt
+
+# ==================================
+# Environment and Build Tools
+# ==================================
+**/.env*
 .tox
+.venv
+
+# ==================================
+# Testing and Coverage
+# ==================================
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*,cover
+*.cover
+tests/
+scripts/
+
+# ==================================
+# Logs and Misc
+# ==================================
 *.log
 .git*
-tests
-scripts
-postman
-./postgres-data
-.venv
+postman/
+postgres-data/
