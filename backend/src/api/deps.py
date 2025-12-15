@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import Depends
 from sqlmodel import Session
 
+from src.core.config import settings
 from src.core.db import engine
-from src.core.settings import settings
 
 
 def get_session():
