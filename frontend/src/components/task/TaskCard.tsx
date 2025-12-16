@@ -10,9 +10,26 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Calendar, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 
-const TaskCard = ({}) => {
+interface TaskCardProps {
+  category: string;
+}
+
+const TaskCard = ({ category }: TaskCardProps) => {
+  const categoryColors: Record<string, { border: string }> = {
+    Work: { border: 'border-l-blue-500' },
+    Personal: { border: 'border-l-green-500' },
+    Urgent: { border: 'border-l-red-500' },
+  };
+
+  const categoryColor = categoryColors[category] || {
+    border: 'bg-gray-100',
+    text: 'text-gray-800',
+  };
+
   return (
-    <Card className="p-4 border-l-4 bg-white hover:shadow-md transition-shadow duration-200">
+    <Card
+      className={`p-4 border-l-4 ${categoryColor.border} bg-white hover:shadow-md transition-shadow duration-200`}
+    >
       <div className="flex items-start gap-3">
         {/* Checkbox */}
         <Checkbox className="mt-1 border-stone-300 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600" />
