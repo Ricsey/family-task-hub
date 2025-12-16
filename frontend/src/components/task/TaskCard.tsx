@@ -11,17 +11,28 @@ import {
 import { Calendar, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 
 interface TaskCardProps {
-  category: string;
+  categoryName: string;
 }
 
-const TaskCard = ({ category }: TaskCardProps) => {
-  const categoryColors: Record<string, { border: string }> = {
-    Work: { border: 'border-l-blue-500' },
-    Personal: { border: 'border-l-green-500' },
-    Urgent: { border: 'border-l-red-500' },
+const TaskCard = ({ categoryName }: TaskCardProps) => {
+  const categoryColors: Record<
+    string,
+    { border: string; background: string; text: string }
+  > = {
+    Work: {
+      border: 'border-l-blue-500',
+      background: 'bg-blue-100',
+      text: 'text-blue-800',
+    },
+    Personal: {
+      border: 'border-l-green-500',
+      background: 'bg-green-100',
+      text: 'text-green-800',
+    },
+    // Urgent: { border: 'border-l-red-500' },
   };
 
-  const categoryColor = categoryColors[category] || {
+  const categoryColor = categoryColors[categoryName] || {
     border: 'bg-gray-100',
     text: 'text-gray-800',
   };
@@ -82,13 +93,12 @@ const TaskCard = ({ category }: TaskCardProps) => {
             {/* Category */}
             <Badge
               variant="secondary"
-              className="text-xs"
-              style={{
-                backgroundColor: `red15`,
-                color: 'red',
-              }}
+              className={`text-xs ${categoryColor.background} ${categoryColor.text} font-semibold`}
+              //   style={{
+              //     color: 'red',
+              //   }}
             >
-              Category name
+              {categoryName}
             </Badge>
 
             {/* Recurring
