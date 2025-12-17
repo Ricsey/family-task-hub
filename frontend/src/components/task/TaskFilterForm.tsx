@@ -1,4 +1,4 @@
-import { Filter, Search, SortAsc } from 'lucide-react';
+import { Filter, Search, SortAsc, User } from 'lucide-react';
 import { Input } from '../ui/input';
 import {
   Select,
@@ -55,7 +55,8 @@ const TaskFilterForm = ({
         value={filterAssignee}
         onValueChange={(value) => onSelectAssignee(value)}
       >
-        <SelectTrigger className="w-full lg:w-40">
+        <SelectTrigger className="w-full lg:w-45">
+          <User className="w-4 h-4 mr-2 text-stone-400" />
           <SelectValue placeholder="Assignee" />
         </SelectTrigger>
         <SelectContent>
