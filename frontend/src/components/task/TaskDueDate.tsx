@@ -1,5 +1,6 @@
 import { isPast, isToday, parseISO } from 'date-fns';
 import { Calendar } from 'lucide-react';
+import { formatDueDate } from './utils';
 
 interface TaskDueDateProps {
   dueDate: string;
@@ -9,6 +10,7 @@ interface TaskDueDateProps {
 const TaskDueDate = ({ dueDate, isDone }: TaskDueDateProps) => {
   const dueDateISO = parseISO(dueDate);
   const isOverDue = isPast(dueDateISO) && !isToday(dueDateISO) && !isDone;
+  const renderedDate = formatDueDate(dueDate);
 
   return (
     <div
@@ -17,7 +19,7 @@ const TaskDueDate = ({ dueDate, isDone }: TaskDueDateProps) => {
       }`}
     >
       <Calendar className="w-3 h-3" />
-      {dueDateISO.toISOString().split('T')[0]}
+      {renderedDate}
     </div>
   );
 };
