@@ -56,7 +56,7 @@ const TaskCard = ({ task, onToggleStatus, onEdit }: TaskCardProps) => {
 
           {/* Meta info */}
           <div className="flex items-center flex-wrap gap-2 mt-3 ">
-            <TaskAssignee name={task.assignee} />
+            {task.assignee && <TaskAssignee name={task.assignee} />}
             <TaskCategory categoryName={task.category} />
 
             {/* Recurring

@@ -84,7 +84,11 @@ const TaskEditModal = ({
               <Select
                 value={formData.assignee || 'none'}
                 onValueChange={
-                  (val) => setFormData({ ...formData, assignee: val }) // TODO: What happens when noone is assigned?
+                  (val) =>
+                    setFormData({
+                      ...formData,
+                      assignee: val === 'none' ? undefined : val,
+                    }) // Because assignee is optional
                 }
               >
                 <SelectTrigger>
