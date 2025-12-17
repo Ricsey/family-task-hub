@@ -1,6 +1,6 @@
 import './App.css';
 import type { Task } from './components/task/entities';
-import TasksList from './components/task/TaskList';
+import TaskList from './pages/TaskList';
 
 const exampleTasks: Task[] = [
   {
@@ -43,7 +43,8 @@ const exampleTasks: Task[] = [
 
 function App() {
   // return <TaskCard task={exampleTasks[0]} />;
-  return <TasksList tasks={exampleTasks} />;
+  return <TaskList tasks={exampleTasks} />;
+  return;
 }
 
 export default App;

@@ -9,7 +9,9 @@ const TasksList = ({ tasks }: TasksListProps) => {
   return (
     <div className="space-y-3">
       {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
+        <div className="space-y-3">
+          <TaskCard key={task.id} task={task} />
+        </div>
       ))}
     </div>
   );
