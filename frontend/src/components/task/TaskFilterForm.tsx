@@ -11,26 +11,35 @@ import {
 interface TaskFilterFormProps {
   filterCategory: string;
   filterAssignee: string;
+  searchQuery: string;
   sortBy: string;
   onSelectCategory: (category: string) => void;
   onSelectAssignee: (assignee: string) => void;
   onSelectSortBy: (sortBy: string) => void;
+  onSearchChanged: (value: string) => void;
 }
 
 const TaskFilterForm = ({
   filterCategory,
   filterAssignee,
+  searchQuery,
   sortBy,
   onSelectCategory,
   onSelectAssignee,
   onSelectSortBy,
+  onSearchChanged,
 }: TaskFilterFormProps) => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
       {/* Search field */}
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
-        <Input placeholder="Search..." className="pl-10" />
+        <Input
+          placeholder="Search..."
+          className="pl-10"
+          value={searchQuery}
+          onChange={(event) => onSearchChanged(event.target.value)}
+        />
       </div>
 
       {/* Category filter */}

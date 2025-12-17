@@ -17,15 +17,28 @@ const filterByAssignee = (tasks: Task[], assignee: string) => {
   return tasks.filter((task) => task.assignee === assignee);
 };
 
+const filterBySearch = (tasks: Task[], query: string) => {
+  if (!query) return tasks;
+
+  const lowerQuery = query.toLowerCase();
+  return tasks.filter(
+    (task) =>
+      task.title.toLowerCase().includes(lowerQuery) ||
+      task.description?.toLowerCase().includes(lowerQuery)
+  );
+};
+
 export const filterTasks = (
   tasks: Task[],
   category: string,
-  assignee: string
+  assignee: string,
+  searchQuery: string
 ) => {
   let result = [...tasks];
 
   result = filterByCategory(result, category);
   result = filterByAssignee(result, assignee);
+  result = filterBySearch(result, searchQuery);
 
   return result;
 };

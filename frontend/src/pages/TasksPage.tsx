@@ -46,14 +46,21 @@ const TasksPage = () => {
   ]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAssignee, setSelectedAssignee] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('dueDate');
 
   const clearFilters = () => {
     setSelectedCategory('all');
     setSelectedAssignee('all');
+    setSearchQuery('');
   };
 
-  const filteredTasks = filterTasks(tasks, selectedCategory, selectedAssignee);
+  const filteredTasks = filterTasks(
+    tasks,
+    selectedCategory,
+    selectedAssignee,
+    searchQuery
+  );
   const filteredAndSortedTasks = sortTasks(filteredTasks, sortBy);
 
   const handleToggleTaskStatus = (taskId: string) => {
@@ -76,10 +83,12 @@ const TasksPage = () => {
         <TaskFilterForm
           filterCategory={selectedCategory}
           filterAssignee={selectedAssignee}
+          searchQuery={searchQuery}
           sortBy={sortBy}
           onSelectCategory={(category) => setSelectedCategory(category)}
           onSelectAssignee={(assignee) => setSelectedAssignee(assignee)}
           onSelectSortBy={(sortBy) => setSortBy(sortBy)}
+          onSearchChanged={setSearchQuery}
         />
       </Card>
       <TasksList
