@@ -1,4 +1,4 @@
-import { Filter, Search } from 'lucide-react';
+import { Filter, Search, SortAsc } from 'lucide-react';
 import { Input } from '../ui/input';
 import {
   Select,
@@ -11,15 +11,19 @@ import {
 interface TaskFilterFormProps {
   filterCategory: string;
   filterAssignee: string;
+  sortBy: string;
   onSelectCategory: (category: string) => void;
   onSelectAssignee: (assignee: string) => void;
+  onSelectSortBy: (sortBy: string) => void;
 }
 
 const TaskFilterForm = ({
   filterCategory,
   filterAssignee,
+  sortBy,
   onSelectCategory,
   onSelectAssignee,
+  onSelectSortBy,
 }: TaskFilterFormProps) => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
@@ -58,6 +62,18 @@ const TaskFilterForm = ({
           <SelectItem value="all">All Members</SelectItem>
           <SelectItem value="Mom">Mom</SelectItem>
           <SelectItem value="Dad">Dad</SelectItem>
+        </SelectContent>
+      </Select>
+
+      {/* Sort by */}
+      <Select value={sortBy} onValueChange={onSelectSortBy}>
+        <SelectTrigger className="w-full lg:w-40">
+          <SortAsc className="w-4 h-4 mr-2 text-stone-400" />
+          <SelectValue placeholder="Sort by" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="dueDate">Due Date (Ascending)</SelectItem>
+          <SelectItem value="title">Title</SelectItem>
         </SelectContent>
       </Select>
     </div>

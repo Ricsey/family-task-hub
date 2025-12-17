@@ -1,23 +1,9 @@
 import type { Task } from '@/components/task/entities';
 import TaskFilterForm from '@/components/task/TaskFilterForm';
 import TasksList from '@/components/task/TaskList';
+import { filterTasks, sortTasks } from '@/components/task/utils';
 import { Card } from '@/components/ui/card';
 import { useState } from 'react';
-
-const filterTasks = (tasks: Task[], category: string, assignee: string) => {
-  let result = [...tasks];
-
-  if (category !== 'all') {
-    result = result.filter((task) => task.category === category);
-  }
-
-  console.log('Filtering by assignee:', assignee);
-  if (assignee !== 'all') {
-    result = result.filter((task) => task.assignee === assignee);
-  }
-
-  return result;
-};
 
 const TasksPage = () => {
   const [tasks, setTasks] = useState<Task[]>([
@@ -60,6 +46,7 @@ const TasksPage = () => {
   ]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAssignee, setSelectedAssignee] = useState('all');
+  const [sortBy, setSortBy] = useState('dueDate');
 
   const clearFilters = () => {
     setSelectedCategory('all');
@@ -67,6 +54,7 @@ const TasksPage = () => {
   };
 
   const filteredTasks = filterTasks(tasks, selectedCategory, selectedAssignee);
+  const filteredAndSortedTasks = sortTasks(filteredTasks, sortBy);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,12 +62,14 @@ const TasksPage = () => {
       <Card className="p-4 mb-6">
         <TaskFilterForm
           filterCategory={selectedCategory}
-          onSelectCategory={(category) => setSelectedCategory(category)}
           filterAssignee={selectedAssignee}
+          sortBy={sortBy}
+          onSelectCategory={(category) => setSelectedCategory(category)}
           onSelectAssignee={(assignee) => setSelectedAssignee(assignee)}
+          onSelectSortBy={(sortBy) => setSortBy(sortBy)}
         />
       </Card>
-      <TasksList tasks={filteredTasks} onClearFilters={clearFilters} />
+      <TasksList tasks={filteredAndSortedTasks} onClearFilters={clearFilters} />
     </div>
   );
 };
