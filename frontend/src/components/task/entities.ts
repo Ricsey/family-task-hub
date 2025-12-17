@@ -3,7 +3,7 @@ export interface Task {
   title: string;
   description?: string;
   assignee: string;
-  category: string;
+  category: 'Chores' | 'Homework' | 'Shopping' | 'Other';
   dueDate?: string;
-  status: 'in-progress' | 'completed';
+  status: 'todo' | 'in-progress' | 'completed';
 }

@@ -5,15 +5,20 @@ type CategoryColor = {
 };
 
 const CATEGORY_COLORS: Record<string, CategoryColor> = {
-  Work: {
+  Homework: {
     border: 'border-l-blue-500',
     background: 'bg-blue-100',
     text: 'text-blue-800',
   },
-  Personal: {
+  Chores: {
     border: 'border-l-green-500',
     background: 'bg-green-100',
     text: 'text-green-800',
+  },
+  Other: {
+    border: 'border-l-purple-500',
+    background: 'bg-purple-100',
+    text: 'text-purple-800',
   },
 };
 
