@@ -167,6 +167,9 @@ const TaskEditModal = ({
                 </SelectContent>
               </Select>
             </div>
+
+            {/* TODO */}
+            {/* Add due date changing option */}
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
