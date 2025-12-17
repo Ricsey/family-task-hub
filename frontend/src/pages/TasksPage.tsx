@@ -43,7 +43,11 @@ const TasksPage = () => {
       status: 'in-progress',
     },
   ]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const clearFilters = () => {
+    setSelectedCategory('all');
+  };
 
   const filteredTasks =
     selectedCategory && selectedCategory !== 'all'
@@ -55,10 +59,11 @@ const TasksPage = () => {
       <h1 className="text-2xl font-bold text-stone-800 mb-6">All Tasks</h1>
       <Card className="p-4 mb-6">
         <TaskFilterForm
+          filterCategory={selectedCategory}
           onSelectCategory={(category) => setSelectedCategory(category)}
         />
       </Card>
-      <TasksList tasks={filteredTasks} />
+      <TasksList tasks={filteredTasks} onClearFilters={clearFilters} />
     </div>
   );
 };

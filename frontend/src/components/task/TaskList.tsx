@@ -5,16 +5,17 @@ import { Card } from '@/components/ui/card';
 
 interface TasksListProps {
   tasks: Task[];
+  onClearFilters: () => void;
 }
 
-const TasksList = ({ tasks }: TasksListProps) => {
+const TasksList = ({ tasks, onClearFilters }: TasksListProps) => {
   if (tasks.length === 0) {
     return (
       <Card className="p-12 bg-white text-center">
         <p className="text-stone-500">No tasks found matching your filters.</p>
         <Button
           variant="link"
-          // onClick={clearFilters}
+          onClick={onClearFilters}
           className="mt-2 text-teal-600"
         >
           Clear all filters

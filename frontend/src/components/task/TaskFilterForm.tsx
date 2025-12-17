@@ -9,10 +9,14 @@ import {
 } from '../ui/select';
 
 interface TaskFilterFormProps {
+  filterCategory: string;
   onSelectCategory: (category: string) => void;
 }
 
-const TaskFilterForm = ({ onSelectCategory }: TaskFilterFormProps) => {
+const TaskFilterForm = ({
+  filterCategory,
+  onSelectCategory,
+}: TaskFilterFormProps) => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
       {/* Search field */}
@@ -22,7 +26,10 @@ const TaskFilterForm = ({ onSelectCategory }: TaskFilterFormProps) => {
       </div>
 
       {/* Category filter */}
-      <Select onValueChange={(value) => onSelectCategory(value)}>
+      <Select
+        value={filterCategory}
+        onValueChange={(value) => onSelectCategory(value)}
+      >
         <SelectTrigger className="w-full lg:w-40">
           <Filter className="w-4 h-4 mr-2 text-stone-400" />
           <SelectValue placeholder="Category" />
