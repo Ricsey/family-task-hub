@@ -6,9 +6,14 @@ import { Card } from '@/components/ui/card';
 interface TasksListProps {
   tasks: Task[];
   onClearFilters: () => void;
+  onToggleTaskStatus: (taskId: string) => void;
 }
 
-const TasksList = ({ tasks, onClearFilters }: TasksListProps) => {
+const TasksList = ({
+  tasks,
+  onClearFilters,
+  onToggleTaskStatus,
+}: TasksListProps) => {
   if (tasks.length === 0) {
     return (
       <Card className="p-12 bg-white text-center">
@@ -28,7 +33,10 @@ const TasksList = ({ tasks, onClearFilters }: TasksListProps) => {
     <div className="space-y-3">
       {tasks.map((task) => (
         <div className="space-y-3" key={task.id}>
-          <TaskCard task={task} />
+          <TaskCard
+            task={task}
+            onToggleStatus={() => onToggleTaskStatus(task.id)}
+          />
         </div>
       ))}
     </div>

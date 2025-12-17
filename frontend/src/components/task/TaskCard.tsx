@@ -9,9 +9,10 @@ import TaskDueDate from './TaskDueDate';
 
 interface TaskCardProps {
   task: Task;
+  onToggleStatus: () => void;
 }
 
-const TaskCard = ({ task }: TaskCardProps) => {
+const TaskCard = ({ task, onToggleStatus }: TaskCardProps) => {
   const categoryColors = getCategoryColors(task.category);
 
   const isDone = task.status === 'completed';
@@ -26,7 +27,11 @@ const TaskCard = ({ task }: TaskCardProps) => {
     >
       <div className="flex items-start gap-3">
         {/* Checkbox */}
-        <Checkbox className="mt-1 border-stone-300 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600" />
+        <Checkbox
+          className="mt-1 border-stone-300 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
+          checked={isDone}
+          onCheckedChange={onToggleStatus}
+        />
 
         {/* Content */}
         <div className="flex-1 min-w-0">

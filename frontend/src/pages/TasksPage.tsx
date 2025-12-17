@@ -56,6 +56,19 @@ const TasksPage = () => {
   const filteredTasks = filterTasks(tasks, selectedCategory, selectedAssignee);
   const filteredAndSortedTasks = sortTasks(filteredTasks, sortBy);
 
+  const handleToggleTaskStatus = (taskId: string) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              status: task.status === 'completed' ? 'in-progress' : 'completed',
+            }
+          : task
+      )
+    );
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold text-stone-800 mb-6">All Tasks</h1>
@@ -69,7 +82,11 @@ const TasksPage = () => {
           onSelectSortBy={(sortBy) => setSortBy(sortBy)}
         />
       </Card>
-      <TasksList tasks={filteredAndSortedTasks} onClearFilters={clearFilters} />
+      <TasksList
+        tasks={filteredAndSortedTasks}
+        onClearFilters={clearFilters}
+        onToggleTaskStatus={handleToggleTaskStatus}
+      />
     </div>
   );
 };
