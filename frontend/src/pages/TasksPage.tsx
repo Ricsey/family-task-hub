@@ -52,6 +52,7 @@ const TasksPage = () => {
   const clearFilters = () => {
     setSelectedCategory('all');
     setSelectedAssignee('all');
+    setSortBy('dueDate');
     setSearchQuery('');
   };
 
