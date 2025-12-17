@@ -4,6 +4,21 @@ import TasksList from '@/components/task/TaskList';
 import { Card } from '@/components/ui/card';
 import { useState } from 'react';
 
+const filterTasks = (tasks: Task[], category: string, assignee: string) => {
+  let result = [...tasks];
+
+  if (category !== 'all') {
+    result = result.filter((task) => task.category === category);
+  }
+
+  console.log('Filtering by assignee:', assignee);
+  if (assignee !== 'all') {
+    result = result.filter((task) => task.assignee === assignee);
+  }
+
+  return result;
+};
+
 const TasksPage = () => {
   const [tasks, setTasks] = useState<Task[]>([
     {
@@ -44,15 +59,14 @@ const TasksPage = () => {
     },
   ]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedAssignee, setSelectedAssignee] = useState('all');
 
   const clearFilters = () => {
     setSelectedCategory('all');
+    setSelectedAssignee('all');
   };
 
-  const filteredTasks =
-    selectedCategory && selectedCategory !== 'all'
-      ? tasks.filter((task) => task.category === selectedCategory)
-      : tasks;
+  const filteredTasks = filterTasks(tasks, selectedCategory, selectedAssignee);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,6 +75,8 @@ const TasksPage = () => {
         <TaskFilterForm
           filterCategory={selectedCategory}
           onSelectCategory={(category) => setSelectedCategory(category)}
+          filterAssignee={selectedAssignee}
+          onSelectAssignee={(assignee) => setSelectedAssignee(assignee)}
         />
       </Card>
       <TasksList tasks={filteredTasks} onClearFilters={clearFilters} />
