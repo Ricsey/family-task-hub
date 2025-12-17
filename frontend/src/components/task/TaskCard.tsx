@@ -10,9 +10,10 @@ import TaskDueDate from './TaskDueDate';
 interface TaskCardProps {
   task: Task;
   onToggleStatus: () => void;
+  onEdit: (task: Task) => void;
 }
 
-const TaskCard = ({ task, onToggleStatus }: TaskCardProps) => {
+const TaskCard = ({ task, onToggleStatus, onEdit }: TaskCardProps) => {
   const categoryColors = getCategoryColors(task.category);
 
   const isDone = task.status === 'completed';
@@ -50,7 +51,7 @@ const TaskCard = ({ task, onToggleStatus }: TaskCardProps) => {
             </div>
 
             {/* Actions */}
-            <TaskActions />
+            <TaskActions task={task} onEdit={onEdit} />
           </div>
 
           {/* Meta info */}

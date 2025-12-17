@@ -6,8 +6,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import type { Task } from './entities';
 
-const TaskActions = () => {
+interface TaskActionsProps {
+  task: Task;
+  onEdit: (task: Task) => void;
+}
+
+const TaskActions = ({ task, onEdit }: TaskActionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -16,7 +22,7 @@ const TaskActions = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onEdit(task)}>
           <Pencil className="w-4 h-4 mr-2" />
           Edit
         </DropdownMenuItem>

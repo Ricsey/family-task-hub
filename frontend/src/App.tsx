@@ -1,9 +1,8 @@
 import './App.css';
-import EditTaskModal from './components/task/EditTaskModal';
+import TasksPage from './pages/TasksPage';
 
 function App() {
-  // return <TasksPage />;
-  return <EditTaskModal />;
+  return <TasksPage />;
 }
 
 export default App;
