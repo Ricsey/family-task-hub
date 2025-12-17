@@ -1,16 +1,33 @@
 import type { Task } from '@/components/task/entities';
 import TaskCard from '@/components/task/TaskCard';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface TasksListProps {
   tasks: Task[];
 }
 
 const TasksList = ({ tasks }: TasksListProps) => {
+  if (tasks.length === 0) {
+    return (
+      <Card className="p-12 bg-white text-center">
+        <p className="text-stone-500">No tasks found matching your filters.</p>
+        <Button
+          variant="link"
+          // onClick={clearFilters}
+          className="mt-2 text-teal-600"
+        >
+          Clear all filters
+        </Button>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {tasks.map((task) => (
-        <div className="space-y-3">
-          <TaskCard key={task.id} task={task} />
+        <div className="space-y-3" key={task.id}>
+          <TaskCard task={task} />
         </div>
       ))}
     </div>

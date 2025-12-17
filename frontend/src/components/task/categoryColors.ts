@@ -10,7 +10,7 @@ const CATEGORY_COLORS: Record<string, CategoryColor> = {
     background: 'bg-blue-100',
     text: 'text-blue-800',
   },
-  Chores: {
+  Chore: {
     border: 'border-l-green-500',
     background: 'bg-green-100',
     text: 'text-green-800',
