@@ -31,7 +31,7 @@ const TaskEditModal = ({
   onSave,
 }: TaskEditModalProps) => {
   const [formData, setFormData] = useState<Partial<Task>>({});
-  const [calendarOpen, setCalendarOpen] = useState(true);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   useEffect(() => {
     if (task) {
@@ -82,8 +82,8 @@ const TaskEditModal = ({
             />
           </div>
 
-          {/* Assign to */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 items-start">
+            {/* Assign to */}
             <div className="space-y-2">
               <Label>Assign to</Label>
               <Select
@@ -130,10 +130,44 @@ const TaskEditModal = ({
                 </SelectContent>
               </Select>
             </div>
-          </div>
 
-          {/* Category */}
-          <div className="grid grid-cols-2 gap-4">
+            {/* Due date */}
+            <div className="space-y-2">
+              <Label>Due date *</Label>
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    // className="w-full justify-start text-left font-normal"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4 text-stone-400" />
+                    {formData.dueDate
+                      ? format(parseISO(formData.dueDate), 'PPP')
+                      : 'Pick a date'}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={
+                      formData.dueDate ? parseISO(formData.dueDate) : undefined
+                    }
+                    onSelect={(date) => {
+                      if (date) {
+                        setFormData({
+                          ...formData,
+                          dueDate: format(date, 'yyyy-MM-dd'),
+                        });
+                        setCalendarOpen(false);
+                      }
+                    }}
+                    autoFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Category */}
             <div className="space-y-2">
               <Label>Category *</Label>
               <Select
@@ -172,47 +206,7 @@ const TaskEditModal = ({
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="grid grid-cols-2 gap-4 items-start">
-              <div className="space-y-2">
-                <Label>Due date *</Label>
-                <Popover open={calendarOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      // className="w-full justify-start text-left font-normal"
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4 text-stone-400" />
-                      {formData.dueDate
-                        ? format(parseISO(formData.dueDate), 'PPP')
-                        : 'Pick a date'}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={
-                        formData.dueDate
-                          ? parseISO(formData.dueDate)
-                          : undefined
-                      }
-                      onSelect={(date) => {
-                        if (date) {
-                          setFormData({
-                            ...formData,
-                            dueDate: format(date, 'yyyy-MM-dd'),
-                          });
-                          setCalendarOpen(false);
-                        }
-                      }}
-                      autoFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
           </div>
-
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="ghost" onClick={onClose}>
               Cancel
