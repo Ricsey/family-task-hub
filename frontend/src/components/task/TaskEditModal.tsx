@@ -1,8 +1,12 @@
+import { format, parseISO } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
+import { Calendar } from '../ui/calendar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import {
   Select,
   SelectContent,
@@ -27,6 +31,7 @@ const TaskEditModal = ({
   onSave,
 }: TaskEditModalProps) => {
   const [formData, setFormData] = useState<Partial<Task>>({});
+  const [calendarOpen, setCalendarOpen] = useState(true);
 
   useEffect(() => {
     if (task) {
@@ -168,8 +173,44 @@ const TaskEditModal = ({
               </Select>
             </div>
 
-            {/* TODO */}
-            {/* Add due date changing option */}
+            <div className="grid grid-cols-2 gap-4 items-start">
+              <div className="space-y-2">
+                <Label>Due date *</Label>
+                <Popover open={calendarOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      // className="w-full justify-start text-left font-normal"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4 text-stone-400" />
+                      {formData.dueDate
+                        ? format(parseISO(formData.dueDate), 'PPP')
+                        : 'Pick a date'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={
+                        formData.dueDate
+                          ? parseISO(formData.dueDate)
+                          : undefined
+                      }
+                      onSelect={(date) => {
+                        if (date) {
+                          setFormData({
+                            ...formData,
+                            dueDate: format(date, 'yyyy-MM-dd'),
+                          });
+                          setCalendarOpen(false);
+                        }
+                      }}
+                      autoFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
