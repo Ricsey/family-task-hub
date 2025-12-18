@@ -1,7 +1,12 @@
 import uuid
+from typing import TYPE_CHECKING
 
 from pydantic import EmailStr
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
+
+# Just for ty to not show missing import error
+if TYPE_CHECKING:
+    from src.models.tasks import Task
 
 
 class UserBase(SQLModel):
@@ -14,6 +19,7 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
+    tasks: list["Task"] = Relationship(back_populates="assignee")
 
 
 class UserPublic(UserBase):
