@@ -6,7 +6,6 @@ services:
     volumes:
       - ..:/workspace:cached
     command: sleep infinity
-    # network_mode: service:db
 
   db:
     image: postgres:17
@@ -29,7 +28,6 @@ services:
       - db
     volumes:
       - pgadmin-data:/var/lib/pgadmin
-    restart: always
 
 volumes:
   postgres-data:
