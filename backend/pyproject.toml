@@ -15,5 +15,21 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pytest>=9.0.2",
     "ty>=0.0.1a34",
+    "pytest",
+    "pytest-asyncio", # Essential for testing async endpoints
+    "httpx",          # Required for FastAPI's TestClient
 ]
+
+[tool.pytest.ini_options]
+# Set the root for imports so 'src.models' works correctly
+pythonpath = ["."]
+
+testpaths = ["tests"]
+
+# Auto-detect async tests without needing @pytest.mark.asyncio every time
+asyncio_mode = "auto"
+
+# Optional: Add clear, colorful output and standard markers
+addopts = "-v --tb=short"
