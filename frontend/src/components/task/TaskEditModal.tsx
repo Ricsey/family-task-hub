@@ -49,8 +49,6 @@ const TaskEditModal = ({
     }
   };
 
-  console.log(formData);
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
