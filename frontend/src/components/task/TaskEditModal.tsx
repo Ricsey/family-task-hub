@@ -1,3 +1,4 @@
+import axios, { CanceledError } from 'axios';
 import { format, parseISO } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -32,6 +33,8 @@ const TaskEditModal = ({
 }: TaskEditModalProps) => {
   const [formData, setFormData] = useState<Partial<Task>>({});
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (task) {
@@ -39,7 +42,26 @@ const TaskEditModal = ({
     } else {
       setFormData({}); // Clear for 'Add' mode
     }
-  }, [task, isOpen]);
+  }, [task, isOpen]); // TODO: why do we need isOpen dependency?
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    axios
+      .get('http://localhost:8000/tasks/categories', {
+        signal: controller.signal,
+      })
+      .then((res) => {
+        setCategories(res.data['categories']);
+        console.log(res.data['categories']);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+      });
+
+    return () => controller.abort();
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -181,26 +203,17 @@ const TaskEditModal = ({
                   <SelectValue placeholder="Select member" />
                 </SelectTrigger>
                 <SelectContent>
-                  {/* Chore */}
-                  <SelectItem key="Chore" value="Chore">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: '#0D9488' }}
-                      />
-                      Chore
-                    </div>
-                  </SelectItem>
-                  {/* Shopping */}
-                  <SelectItem key="Shopping" value="Shopping">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-3 h-3 rounded-full bg-blue-500"
-                        // style={{ backgroundColor: '#0D9488' }}
-                      />
-                      Shopping
-                    </div>
-                  </SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: '#0D9488' }} // TODO: rotate colors
+                        />
+                        {cat}
+                      </div>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

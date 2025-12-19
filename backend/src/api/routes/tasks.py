@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from sqlmodel import select
 
 from src.api.deps import SessionDep
-from src.models.tasks import Task, TaskCreate
+from src.models.tasks import Task, TaskCategory, TaskCreate
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -11,6 +11,11 @@ router = APIRouter(prefix="/tasks", tags=["tasks"])
 def read_tasks(session: SessionDep):
     tasks = session.exec(select(Task)).all()
     return tasks
+
+
+@router.get("/categories")
+def read_categories(session: SessionDep):
+    return {"categories": [c.value for c in TaskCategory]}
 
 
 @router.get("/{task_id}", response_model=Task)
