@@ -1,15 +1,14 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
-  "name": "Family Tasks Hub Dev Container",
-  "dockerComposeFile": "docker-compose.yml",
+  "name": "Backend",
+  "dockerComposeFile": ["../../docker-compose.yml", "../../docker-compose.override.yml"],
   "service": "backend",
-  "workspaceFolder": "/workspace",
+  "workspaceFolder": "/workspace/backend",
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
     8000
   ],
-  "postCreateCommand": ".devcontainer/setup.sh",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,5 +21,6 @@
         "waderyan.gitblame"
       ]
     }
-  }
+  },
+  "postCreateCommand": "bash ../.devcontainer/backend/setup.sh"
 }

@@ -9,6 +9,8 @@ echo "🚀 Setting up Family Task Hub Frontend environment..."
 #     cd /workspace
 #     npm install
 # fi
+cd /workspace/frontend
+bun i
 
 echo "✅ Frontend development environment setup complete!"
 echo ""

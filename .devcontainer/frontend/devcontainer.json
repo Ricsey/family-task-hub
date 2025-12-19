@@ -1,8 +1,14 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/marcosgomesneto/bun-devcontainers/tree/main/src/basic-bun
 {
-  "name": "Family Task Hub - Frontend",
-  "dockerFile": "Dockerfile",
+  "name": "Frontend",
+  "dockerComposeFile": ["../../docker-compose.yml", "../../docker-compose.override.yml"],
+  "service": "frontend",
+  "workspaceFolder": "/workspace/frontend",
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [
+    5173
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -13,5 +19,5 @@
       ]
     }
   },
-  "postCreateCommand": "bash .devcontainer/post-create-frontend.sh"
+  "postCreateCommand": "bash ../.devcontainer/frontend/post-create-frontend.sh"
 }
