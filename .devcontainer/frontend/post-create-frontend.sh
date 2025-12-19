@@ -2,13 +2,10 @@
 set -e
 
 echo "🚀 Setting up Family Task Hub Frontend environment..."
+echo "🗑️ Deleting old dependencies..."
+rm -rf node_modules
 
-# # Install frontend dependencies if not already installed
-# if [ ! -d "/workspace/node_modules" ]; then
-#     echo "📦 Installing frontend dependencies..."
-#     cd /workspace
-#     npm install
-# fi
+echo "📦 Installing frontend dependencies..."
 cd /workspace/frontend
 bun i
 

@@ -9,11 +9,6 @@
   "forwardPorts": [
     5173
   ],
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2":{
-      "installZsh": "true"
-    }
-  },
   "customizations": {
     "vscode": {
       "extensions": [
