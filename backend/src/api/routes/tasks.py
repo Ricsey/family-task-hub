@@ -4,7 +4,7 @@ from sqlmodel import select
 from src.api.deps import SessionDep
 from src.models.tasks import Task, TaskCategory, TaskCreate
 
-router = APIRouter(prefix="/tasks", tags=["tasks"])
+router = APIRouter(prefix="/task", tags=["task"])
 
 
 @router.get("/")
@@ -13,9 +13,9 @@ def read_tasks(session: SessionDep):
     return tasks
 
 
-@router.get("/categories")
+@router.get("/category")
 def read_categories(session: SessionDep):
-    return {"categories": [c.value for c in TaskCategory]}
+    return [c.value for c in TaskCategory]
 
 
 @router.get("/{task_id}", response_model=Task)

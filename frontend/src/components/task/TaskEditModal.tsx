@@ -1,4 +1,4 @@
-import axios, { CanceledError } from 'axios';
+import useCategory from '@/hooks/useCategory';
 import { format, parseISO } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -33,8 +33,6 @@ const TaskEditModal = ({
 }: TaskEditModalProps) => {
   const [formData, setFormData] = useState<Partial<Task>>({});
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (task) {
@@ -44,24 +42,7 @@ const TaskEditModal = ({
     }
   }, [task, isOpen]); // TODO: why do we need isOpen dependency?
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    axios
-      .get('http://localhost:8000/tasks/categories', {
-        signal: controller.signal,
-      })
-      .then((res) => {
-        setCategories(res.data['categories']);
-        console.log(res.data['categories']);
-      })
-      .catch((err) => {
-        if (err instanceof CanceledError) return;
-        setError(err.message);
-      });
-
-    return () => controller.abort();
-  }, []);
+  const { categories } = useCategory();
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
