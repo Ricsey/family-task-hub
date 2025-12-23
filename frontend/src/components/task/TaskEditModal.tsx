@@ -1,21 +1,13 @@
-import { format, parseISO } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
-import { Calendar } from '../ui/calendar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
 import { Textarea } from '../ui/textarea';
+import AssigneeSelect from './AssigneeSelect';
 import CategorySelect from './CategorySelect';
+import DuedateSelect from './DuedateSelect';
 import type { Task } from './entities';
 
 interface TaskEditModalProps {
@@ -68,6 +60,7 @@ const TaskEditModal = ({
               placeholder="Enter task title"
             />
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
             <Textarea
@@ -82,91 +75,29 @@ const TaskEditModal = ({
           </div>
 
           <div className="grid grid-cols-2 gap-4 items-start">
-            {/* Assign to */}
-            <div className="space-y-2">
-              <Label>Assign to</Label>
-              <Select
-                value={formData.assignee || 'none'}
-                onValueChange={
-                  (val) =>
-                    setFormData({
-                      ...formData,
-                      assignee: val === 'none' ? undefined : val,
-                    }) // Because assignee is optional
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select member" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem key="none" value="none">
-                    None
-                  </SelectItem>
-                  {/* Mom */}
-                  <SelectItem key="Mom" value="Mom">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white"
-                        style={{ backgroundColor: '#0D9488' }}
-                      >
-                        M
-                      </div>
-                      Mom
-                    </div>
-                  </SelectItem>
-                  {/* Dad */}
-                  <SelectItem key="Dad" value="Dad">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white"
-                        style={{ backgroundColor: '#0D9488' }}
-                      >
-                        D
-                      </div>
-                      Dad
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Due date */}
-            <div className="space-y-2">
-              <Label>Due date *</Label>
-              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    // className="w-full justify-start text-left font-normal"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4 text-stone-400" />
-                    {formData.dueDate
-                      ? format(parseISO(formData.dueDate), 'PPP')
-                      : 'Pick a date'}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={
-                      formData.dueDate ? parseISO(formData.dueDate) : undefined
-                    }
-                    onSelect={(date) => {
-                      if (date) {
-                        setFormData({
-                          ...formData,
-                          dueDate: format(date, 'yyyy-MM-dd'),
-                        });
-                        setCalendarOpen(false);
-                      }
-                    }}
-                    autoFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            {/* Category */}
+            <AssigneeSelect
+              selectedMember={formData.assignee}
+              onAssigneeChange={
+                (val) =>
+                  setFormData({
+                    ...formData,
+                    assignee: val === 'none' ? undefined : val,
+                  }) // Because assignee is optional
+              }
+            />
+            <DuedateSelect
+              isCalendarOpen={calendarOpen}
+              onOpenChange={setCalendarOpen}
+              date={formData.dueDate}
+              onDateChange={(date) => {
+                if (!date) return;
+                setFormData({
+                  ...formData,
+                  dueDate: format(date, 'yyyy-MM-dd'),
+                });
+                setCalendarOpen(false);
+              }}
+            />
             <CategorySelect
               selectedCategory={formData.category}
               onCategoryChange={(value) =>
@@ -177,6 +108,7 @@ const TaskEditModal = ({
               }
             />
           </div>
+
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="ghost" onClick={onClose}>
               Cancel

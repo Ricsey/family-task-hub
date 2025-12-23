@@ -1,5 +1,4 @@
-import { Filter, Search, SortAsc, User } from 'lucide-react';
-import { Input } from '../ui/input';
+import { Filter, SortAsc, User } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -7,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import SearchField from './SearchField';
 
 interface TaskFilterFormProps {
   filterCategory: string;
@@ -31,16 +31,7 @@ const TaskFilterForm = ({
 }: TaskFilterFormProps) => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
-      {/* Search field */}
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
-        <Input
-          placeholder="Search..."
-          className="pl-10"
-          value={searchQuery}
-          onChange={(event) => onSearchChanged(event.target.value)}
-        />
-      </div>
+      <SearchField value={searchQuery} onTextChange={onSearchChanged} />
 
       {/* Category filter */}
       <Select
