@@ -8,7 +8,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <main>
+      <main className="min-h-screen bg-stone-50">
         <Routes>
           <Route path="/tasks" element={<TasksPage />} />
         </Routes>
