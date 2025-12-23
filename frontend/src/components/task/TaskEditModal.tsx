@@ -1,4 +1,3 @@
-import useCategory from '@/hooks/useCategory';
 import { format, parseISO } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -16,6 +15,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { Textarea } from '../ui/textarea';
+import CategorySelect from './CategorySelect';
 import type { Task } from './entities';
 
 interface TaskEditModalProps {
@@ -41,8 +41,6 @@ const TaskEditModal = ({
       setFormData({}); // Clear for 'Add' mode
     }
   }, [task, isOpen]); // TODO: why do we need isOpen dependency?
-
-  const { categories } = useCategory();
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,35 +167,15 @@ const TaskEditModal = ({
             </div>
 
             {/* Category */}
-            <div className="space-y-2">
-              <Label>Category *</Label>
-              <Select
-                value={formData.category}
-                onValueChange={(val) =>
-                  setFormData({
-                    ...formData,
-                    category: val as Task['category'],
-                  })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: '#0D9488' }} // TODO: rotate colors
-                        />
-                        {cat}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <CategorySelect
+              selectedCategory={formData.category}
+              onCategoryChange={(value) =>
+                setFormData({
+                  ...formData,
+                  category: value as Task['category'],
+                })
+              }
+            />
           </div>
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="ghost" onClick={onClose}>
