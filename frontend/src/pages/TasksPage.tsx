@@ -7,45 +7,12 @@ import { Card } from '@/components/ui/card';
 import { useTaskModal } from '@/hooks/tasks';
 import { useState } from 'react';
 
-const TasksPage = () => {
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: '1',
-      title: 'Vacuum living room',
-      description: 'Vacuum carpet and under furniture',
-      assignee: 'Mom',
-      category: 'Chore',
-      dueDate: '2025-12-11T00:00:00Z',
-      status: 'in-progress',
-    },
-    {
-      id: '2',
-      title: 'Clean the kitchen',
-      description: 'Wipe counters, do dishes, mop floor',
-      assignee: 'Mom',
-      category: 'Chore',
-      dueDate: '2025-12-16T00:00:00Z',
-      status: 'completed',
-    },
-    {
-      id: '3',
-      title: 'Take out trash',
-      description: 'Empty all bins and take to curb',
-      assignee: 'Dad',
-      category: 'Chore',
-      dueDate: '2025-12-16T00:00:00Z',
-      status: 'in-progress',
-    },
-    {
-      id: '4',
-      title: 'Fix garage door',
-      description: 'The hinge needs adjustment',
-      assignee: 'Dad',
-      category: 'Other',
-      dueDate: '2025-12-19T00:00:00Z',
-      status: 'in-progress',
-    },
-  ]);
+interface TasksPageProps {
+  tasks: Task[];
+  onUpdateTask: (task: Task) => void;
+}
+
+const TasksPage = ({ tasks, onUpdateTask }: TasksPageProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAssignee, setSelectedAssignee] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,25 +33,19 @@ const TasksPage = () => {
   );
   const filteredAndSortedTasks = sortTasks(filteredTasks, sortBy);
 
-  const handleToggleTaskStatus = (taskId: string) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              status: task.status === 'completed' ? 'in-progress' : 'completed',
-            }
-          : task
-      )
-    );
+  const handleToggleTaskStatus = (task: Task) => {
+    const updatedTask: Task = {
+      ...task,
+      status: task.status === 'completed' ? 'in-progress' : 'completed',
+    };
+    onUpdateTask(updatedTask);
   };
 
-  const { isOpen, editingTask, openAddModal, openEditModal, closeModal } =
-    useTaskModal();
-  const handleUpdateTask = (updatedTask: Task) => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
-    );
+  const { isOpen, editingTask, openEditModal, closeModal } = useTaskModal();
+
+  const handleSaveEditedTask = (updatedTask: Task) => {
+    onUpdateTask(updatedTask);
+    closeModal();
   };
 
   return (
@@ -114,7 +75,7 @@ const TasksPage = () => {
         isOpen={isOpen}
         task={editingTask}
         onClose={closeModal}
-        onSave={handleUpdateTask}
+        onSave={handleSaveEditedTask}
       />
     </div>
   );

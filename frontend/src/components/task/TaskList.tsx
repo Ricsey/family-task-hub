@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 interface TasksListProps {
   tasks: Task[];
   onClearFilters: () => void;
-  onToggleTaskStatus: (taskId: string) => void;
+  onToggleTaskStatus: (task: Task) => void;
   onEditTask: (task: Task) => void;
 }
 
@@ -37,7 +37,7 @@ const TasksList = ({
         <div className="space-y-3" key={task.id}>
           <TaskCard
             task={task}
-            onToggleStatus={() => onToggleTaskStatus(task.id)}
+            onToggleStatus={() => onToggleTaskStatus(task)}
             onEdit={onEditTask}
           />
         </div>
