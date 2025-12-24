@@ -8,6 +8,7 @@ interface TasksListProps {
   onClearFilters: () => void;
   onToggleTaskStatus: (task: Task) => void;
   onEditTask: (task: Task) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
 const TasksList = ({
@@ -15,6 +16,7 @@ const TasksList = ({
   onClearFilters,
   onToggleTaskStatus,
   onEditTask,
+  onDeleteTask,
 }: TasksListProps) => {
   if (tasks.length === 0) {
     return (
@@ -39,6 +41,7 @@ const TasksList = ({
             task={task}
             onToggleStatus={() => onToggleTaskStatus(task)}
             onEdit={onEditTask}
+            onDelete={onDeleteTask}
           />
         </div>
       ))}

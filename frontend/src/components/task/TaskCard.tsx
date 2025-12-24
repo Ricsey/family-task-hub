@@ -11,9 +11,15 @@ interface TaskCardProps {
   task: Task;
   onToggleStatus: () => void;
   onEdit: (task: Task) => void;
+  onDelete: (taskId: string) => void;
 }
 
-const TaskCard = ({ task, onToggleStatus, onEdit }: TaskCardProps) => {
+const TaskCard = ({
+  task,
+  onToggleStatus,
+  onEdit,
+  onDelete,
+}: TaskCardProps) => {
   const categoryColors = getCategoryColors(task.category);
 
   const isDone = task.status === 'completed';
@@ -51,7 +57,7 @@ const TaskCard = ({ task, onToggleStatus, onEdit }: TaskCardProps) => {
             </div>
 
             {/* Actions */}
-            <TaskActions task={task} onEdit={onEdit} />
+            <TaskActions task={task} onEdit={onEdit} onDelete={onDelete} />
           </div>
 
           {/* Meta info */}

@@ -10,9 +10,10 @@ import { useState } from 'react';
 interface TasksPageProps {
   tasks: Task[];
   onUpdateTask: (task: Task) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
-const TasksPage = ({ tasks, onUpdateTask }: TasksPageProps) => {
+const TasksPage = ({ tasks, onUpdateTask, onDeleteTask }: TasksPageProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAssignee, setSelectedAssignee] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -68,6 +69,7 @@ const TasksPage = ({ tasks, onUpdateTask }: TasksPageProps) => {
         onClearFilters={clearFilters}
         onToggleTaskStatus={handleToggleTaskStatus}
         onEditTask={openEditModal}
+        onDeleteTask={onDeleteTask}
       />
 
       {/* Modal for editing a task */}

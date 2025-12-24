@@ -11,9 +11,10 @@ import type { Task } from './entities';
 interface TaskActionsProps {
   task: Task;
   onEdit: (task: Task) => void;
+  onDelete: (taskId: string) => void;
 }
 
-const TaskActions = ({ task, onEdit }: TaskActionsProps) => {
+const TaskActions = ({ task, onEdit, onDelete }: TaskActionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,7 +27,10 @@ const TaskActions = ({ task, onEdit }: TaskActionsProps) => {
           <Pencil className="w-4 h-4 mr-2" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-red-600 focus:text-red-600">
+        <DropdownMenuItem
+          onClick={() => onDelete(task.id)}
+          className="text-red-600 focus:text-red-600"
+        >
           <Trash2 className="w-4 h-4 mr-2 text-red-600" />
           Delete
         </DropdownMenuItem>

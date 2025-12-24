@@ -62,6 +62,10 @@ function App() {
     );
   }, []);
 
+  const handleDeleteTask = useCallback((taskId: string) => {
+    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+  }, []);
+
   return (
     <div>
       <Navbar onAddTask={openAddModal} />
@@ -70,7 +74,11 @@ function App() {
           <Route
             path="/tasks"
             element={
-              <TasksPage tasks={tasks} onUpdateTask={handleUpdateTask} />
+              <TasksPage
+                tasks={tasks}
+                onUpdateTask={handleUpdateTask}
+                onDeleteTask={handleDeleteTask}
+              />
             }
           />
         </Routes>
