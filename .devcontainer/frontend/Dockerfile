@@ -1,11 +1,11 @@
 FROM oven/bun:slim
 
-# Config Bun
-ENV PATH="~/.bun/bin:${PATH}"
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
 RUN ln -s /usr/local/bin/bun /usr/local/bin/node
+ENV PATH="/home/node/.bun/bin:${PATH}"
 
-# Update packages
-RUN if [ "slim" == "alpine" ] ; then apk update ; else apt-get update ; fi
+WORKDIR /workspace/frontend
+RUN chown -R bun:bun /workspace/frontend
 
-# Install Git
-RUN if [ "slim" == "alpine" ] ; then apk add git ; else apt-get install -y git ; fi
+USER bun

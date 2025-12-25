@@ -1,18 +1,26 @@
 services:
   backend:
+    working_dir: /workspace/backend
     build:
       context: ./backend
       dockerfile: ../.devcontainer/backend/Dockerfile
     volumes:
       - .:/workspace:cached
-    command: sleep infinity
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "uv sync && uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
     restart: unless-stopped
   
   frontend:
+    working_dir: /workspace/frontend
     build:
       context: ./frontend
       dockerfile: ../.devcontainer/frontend/Dockerfile
+    user: "bun"
     volumes:
       - .:/workspace:cached
-    command: sleep infinity
+    ports:
+      - "5173:5173"
+    command: bun run dev
     restart: unless-stopped

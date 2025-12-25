@@ -5,10 +5,8 @@
   "dockerComposeFile": ["../../docker-compose.yml", "../../docker-compose.override.yml"],
   "service": "frontend",
   "workspaceFolder": "/workspace/frontend",
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [
-    5173
-  ],
+  "remoteUser": "bun",
+  "containerUser": "bun",
   "customizations": {
     "vscode": {
       "extensions": [

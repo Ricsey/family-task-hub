@@ -1,37 +1,58 @@
-# ==================================
-# Python Build Artifacts
-# ==================================
-**/__pycache__
-*.pyc
-*.pyo
-*.pyd
-.Python
-pip-log.txt
-pip-delete-this-directory.txt
+# =============================================================
+# 1. Local dependencies
+# =============================================================
+node_modules/
+**/node_modules/
+.venv/
+venv/
+env/
+ENV/
+bin/
+lib/
+share/
+Include/
 
-# ==================================
-# Environment and Build Tools
-# ==================================
-**/.env*
-.tox
-.venv
-
-# ==================================
-# Testing and Coverage
-# ==================================
+# =============================================================
+# 2. Build Artifacts & Cache
+# =============================================================
+# Python artifacts
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.tox/
+.cache/
 .coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-tests/
-scripts/
+htmlcov/
 
-# ==================================
-# Logs and Misc
-# ==================================
+# Vite/React artifacts
+dist/
+build/
+.vite/
+*.tsbuildinfo
+.eslintcache
+
+# =============================================================
+# 3. Secrets & Config
+# =============================================================
+.git
+.gitignore
+.dockerignore
+.vscode/
+.idea/
+*.swp
+*.bak
+.env
+.env.*
+!.env.example
+
+# =============================================================
+# 4. SYSTEM & LOGS
+# =============================================================
 *.log
-.git*
-postman/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
 postgres-data/

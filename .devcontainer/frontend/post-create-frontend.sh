@@ -11,5 +11,5 @@ bun i
 
 echo "✅ Frontend development environment setup complete!"
 echo ""
-echo "📝 Quick start:"
+echo "📝 Starting development server with:"
 echo "  bun run dev"
