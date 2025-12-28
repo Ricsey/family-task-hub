@@ -27,7 +27,7 @@ const taskSchema = z.object({
     .min(1, 'Description is required')
     .max(500, 'Description cannot exceed 500 characters'),
   assignee: z.string().optional(),
-  dueDate: z.string().min(1, 'Due date is required'),
+  dueDate: z.date({error: "Due date is required"}),
   category: z.enum(
     ['Chore', 'Shopping', 'Personal', 'Homework', 'Other'],
     'Category is required'
@@ -50,7 +50,7 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
     defaultValues: {
       title: '',
       description: '',
-      dueDate: '',
+      dueDate: new Date(),
     },
   });
 
@@ -60,7 +60,7 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
       title: '',
       description: '',
       assignee: undefined,
-      dueDate: '',
+      dueDate: new Date(),
       category: undefined,
     });
   }, [isOpen, reset]);
@@ -71,9 +71,10 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
         title: data.title,
         description: data.description,
         assignee_id: data.assignee || null,
-        due_date: data.dueDate,
         category: data.category,
-        status: 'todo', // default status //TODO: clean up the interface to be todo default status, so we can remove it
+        status: 'todo',
+        // Manual mapping to snake_case and YYYY-MM-DD string for Python
+        due_date: format(data.dueDate, 'yyyy-MM-dd'), 
       };
 
       const response = await apiClient.post<Task>('/task', taskPayload);
@@ -152,7 +153,7 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
                     date={field.value}
                     onDateChange={(date) => {
                       if (!date) return;
-                      field.onChange(format(date, 'yyyy-MM-dd'));
+                      field.onChange(date);
                       setCalendarOpen(false);
                     }}
                   />

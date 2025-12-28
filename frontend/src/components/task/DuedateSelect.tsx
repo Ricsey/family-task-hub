@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Calendar } from '../ui/calendar';
@@ -8,8 +8,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 interface DuedateSelectProps {
   isCalendarOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  date?: string;
-  onDateChange: (date: string) => void;
+  date: Date;
+  onDateChange: (date: Date) => void;
 }
 
 const DuedateSelect = ({
@@ -21,9 +21,7 @@ const DuedateSelect = ({
   const handleSelect = (selectedDate: Date | undefined) => {
     if (!selectedDate) return;
 
-    const formatted = format(selectedDate, 'yyyy-MM-dd');
-
-    onDateChange(formatted);
+    onDateChange(selectedDate);
     onOpenChange(false);
   };
 
@@ -37,13 +35,14 @@ const DuedateSelect = ({
             // className="w-full justify-start text-left font-normal"
           >
             <CalendarIcon className="mr-2 h-4 w-4 text-stone-400" />
-            {date ? format(parseISO(date), 'PPP') : 'Pick a date'}
+            {/* {date ? format(parseISO(date), 'PPP') : 'Pick a date'} */}
+            {date ? format(date, 'PPP') : 'Pick a date'}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={date ? parseISO(date) : undefined}
+            selected={date ? date : undefined}
             onSelect={handleSelect}
             autoFocus
           />

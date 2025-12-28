@@ -4,6 +4,6 @@ export interface Task {
   description?: string;
   assignee?: string;
   category: 'Chore' | 'Homework' | 'Shopping' | 'Other';
-  dueDate?: string;
+  due_date: Date;
   status: 'todo' | 'in-progress' | 'completed';
 }

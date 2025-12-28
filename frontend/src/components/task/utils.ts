@@ -1,7 +1,7 @@
 import { format, isToday, isTomorrow } from 'date-fns';
 import type { Task } from './entities';
 
-export const formatDueDate = (dueDate: string) => {
+export const formatDueDate = (dueDate: Date) => {
   if (isToday(dueDate)) return 'Today';
   if (isTomorrow(dueDate)) return 'Tomorrow';
   return format(dueDate, 'MMM d');
@@ -48,10 +48,7 @@ export const sortTasks = (tasks: Task[], sortBy: string): Task[] => {
     switch (sortBy) {
       case 'date':
         // ascending
-        return (
-          new Date(a.dueDate ?? 0).getTime() -
-          new Date(b.dueDate ?? 0).getTime()
-        ); // casue dueDate is optional
+        return a.due_date.getTime() - b.due_date.getTime();
 
       case 'title':
         return a.title.localeCompare(b.title);

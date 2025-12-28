@@ -28,7 +28,7 @@ class TaskBase(SQLModel):
     description: str | None = Field(default=None)
     assignee_id: uuid.UUID | None = Field(default=None, foreign_key="user.id")
     category: TaskCategory
-    due_date: date | None = None
+    due_date: date
     status: TaskStatus
 
 

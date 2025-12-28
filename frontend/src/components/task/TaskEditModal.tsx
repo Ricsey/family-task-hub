@@ -88,12 +88,12 @@ const TaskEditModal = ({
             <DuedateSelect
               isCalendarOpen={calendarOpen}
               onOpenChange={setCalendarOpen}
-              date={formData.dueDate}
+              date={formData.due_date}
               onDateChange={(date) => {
                 if (!date) return;
                 setFormData({
                   ...formData,
-                  dueDate: format(date, 'yyyy-MM-dd'),
+                  due_date: format(date, 'yyyy-MM-dd'),
                 });
                 setCalendarOpen(false);
               }}

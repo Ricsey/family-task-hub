@@ -73,8 +73,8 @@ const TaskCard = ({
               </Badge>
             )} */}
 
-            {task.dueDate && (
-              <TaskDueDate dueDate={task.dueDate} isDone={isDone} />
+            {task.due_date && (
+              <TaskDueDate dueDate={task.due_date} isDone={isDone} />
             )}
           </div>
         </div>
