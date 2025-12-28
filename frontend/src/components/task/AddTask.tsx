@@ -1,3 +1,4 @@
+import apiClient from '@/services/apiClient';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
@@ -65,18 +66,26 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
   }, [isOpen, reset]);
 
   const processSubmit = async (data: AddTaskForm) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // Fake delay, just for testing
+    try {
+      const taskPayload = {
+        title: data.title,
+        description: data.description,
+        assignee_id: data.assignee || null,
+        due_date: data.dueDate,
+        category: data.category,
+        status: 'todo', // default status //TODO: clean up the interface to be todo default status, so we can remove it
+      };
 
-    const newTask = {
-      ...data,
-      id: crypto.randomUUID(), // Or let the backend handle this
-      status: 'todo', // Default status
-      createdAt: new Date().toISOString(),
-    } as Task;
+      const response = await apiClient.post<Task>('/task', taskPayload);
 
-    await onSave(newTask);
-    onClose();
-    console.log(data);
+      const createdTask = response.data;
+      await onSave(createdTask);
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+      //TODO: Error in toast
+    }
   };
 
   return (
