@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import './App.css';
 import Navbar from './components/Navbar';
@@ -6,6 +6,7 @@ import AddTask from './components/task/AddTask';
 import type { Task } from './components/task/entities';
 import { useTaskModal } from './hooks/tasks';
 import TasksPage from './pages/TasksPage';
+import apiClient from './services/apiClient';
 
 const DUMMY_TASKS: Task[] = [
   {
@@ -50,6 +51,20 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>(DUMMY_TASKS);
 
   const { isOpen, openAddModal, closeModal } = useTaskModal();
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await apiClient.get<Task[]>('/task');
+        setTasks(response.data);
+      } catch (error) {
+        console.error('Failed to get tasks: ', error);
+        //TODO: show it in toast.
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   // Handlers
   const handleAddTask = (task: Task) => {
