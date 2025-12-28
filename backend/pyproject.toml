@@ -20,6 +20,7 @@ dev = [
     "pytest",
     "pytest-asyncio", # Essential for testing async endpoints
     "httpx",          # Required for FastAPI's TestClient
+    "debugpy>=1.8.19",
 ]
 
 [tool.pytest.ini_options]

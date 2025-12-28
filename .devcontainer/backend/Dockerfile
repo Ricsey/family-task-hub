@@ -1,11 +1,10 @@
 FROM mcr.microsoft.com/devcontainers/python:3.12
 
-ENV PYTHONBUFFERED 1
+# Install uv by copying the binary from the official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Ensure the uv binary is in the PATH
-ENV PATH="/root/.local/bin:$PATH"
-
-# Install uv globally in the image
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV UV_LINK_MODE=copy
 
 WORKDIR /workspace/backend

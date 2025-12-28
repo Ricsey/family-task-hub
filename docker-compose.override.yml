@@ -8,8 +8,9 @@ services:
       - .:/workspace:cached
     ports:
       - "8000:8000"
+      - "5678:5678" # Debugger
     command: >
-      sh -c "uv sync && uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+      sh -c "uv run python -m debugpy --listen 0.0.0.0:5678 -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
     restart: unless-stopped
   
   frontend:
