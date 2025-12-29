@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response, status
 from sqlmodel import select
 
 from src.api.deps import SessionDep
@@ -58,3 +58,14 @@ def update_task(*, task_id: int, task_in: TaskUpdate, session: SessionDep):
     session.commit()
     session.refresh(db_task)
     return db_task
+
+
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_task(*, task_id: int, session: SessionDep):
+    task = session.get(Task, task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    session.delete(task)
+    session.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

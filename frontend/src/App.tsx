@@ -42,8 +42,14 @@ function App() {
     );
   }, []);
 
-  const handleDeleteTask = useCallback((taskId: string) => {
-    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+  const handleDeleteTask = useCallback(async (taskId: string) => {
+    try {
+      await apiClient.delete(`/task/${taskId}`)
+      setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+      //TODO: Show in toast
+    }
   }, []);
 
   const handleSaveTask = (savedTask: Task) => {
