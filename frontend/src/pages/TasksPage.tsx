@@ -1,19 +1,18 @@
 import type { Task } from '@/components/task/entities';
-import TaskEditModal from '@/components/task/TaskEditModal';
 import TaskFilterForm from '@/components/task/TaskFilterForm';
 import TasksList from '@/components/task/TaskList';
 import { filterTasks, sortTasks } from '@/components/task/utils';
 import { Card } from '@/components/ui/card';
-import { useTaskModal } from '@/hooks/tasks';
 import { useState } from 'react';
 
 interface TasksPageProps {
   tasks: Task[];
   onUpdateTask: (task: Task) => void;
+  onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
 }
 
-const TasksPage = ({ tasks, onUpdateTask, onDeleteTask }: TasksPageProps) => {
+const TasksPage = ({ tasks, onUpdateTask, onEditTask, onDeleteTask }: TasksPageProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAssignee, setSelectedAssignee] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,12 +41,6 @@ const TasksPage = ({ tasks, onUpdateTask, onDeleteTask }: TasksPageProps) => {
     onUpdateTask(updatedTask);
   };
 
-  const { isOpen, editingTask, openEditModal, closeModal } = useTaskModal();
-
-  const handleSaveEditedTask = (updatedTask: Task) => {
-    onUpdateTask(updatedTask);
-    closeModal();
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -68,16 +61,8 @@ const TasksPage = ({ tasks, onUpdateTask, onDeleteTask }: TasksPageProps) => {
         tasks={filteredAndSortedTasks}
         onClearFilters={clearFilters}
         onToggleTaskStatus={handleToggleTaskStatus}
-        onEditTask={openEditModal}
+        onEditTask={onEditTask}
         onDeleteTask={onDeleteTask}
-      />
-
-      {/* Modal for editing a task */}
-      <TaskEditModal
-        isOpen={isOpen}
-        task={editingTask}
-        onClose={closeModal}
-        onSave={handleSaveEditedTask}
       />
     </div>
   );

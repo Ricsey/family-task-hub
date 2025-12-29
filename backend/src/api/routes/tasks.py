@@ -1,8 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
 from src.api.deps import SessionDep
-from src.models.tasks import Task, TaskCategory, TaskCreate
+from src.models.tasks import Task, TaskCategory, TaskCreate, TaskUpdate
 
 router = APIRouter(prefix="/task", tags=["task"])
 
@@ -42,3 +42,19 @@ def create_task(task_in: TaskCreate, session: SessionDep):
     session.refresh(task)
 
     return task
+
+
+@router.patch("/{task_id}", response_model=Task)
+def update_task(*, task_id: int, task_in: TaskUpdate, session: SessionDep):
+    db_task = session.get(Task, task_id)
+    if not db_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    update_data = task_in.model_dump(exclude_unset=True)
+
+    db_task.sqlmodel_update(update_data)
+
+    session.add(db_task)
+    session.commit()
+    session.refresh(db_task)
+    return db_task

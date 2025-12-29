@@ -1,7 +1,7 @@
 import apiClient from '@/services/apiClient';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/button';
@@ -18,6 +18,7 @@ interface TaskEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (task: Task) => void;
+  task?: Task;
 }
 
 const taskSchema = z.object({
@@ -29,41 +30,32 @@ const taskSchema = z.object({
   assignee: z.string().optional(),
   dueDate: z.date({error: "Due date is required"}),
   category: z.enum(
-    ['Chore', 'Shopping', 'Personal', 'Homework', 'Other'],
+    ['Chore', 'Shopping', 'Homework', 'Other'],
     'Category is required'
   ),
 });
 
 type AddTaskForm = z.infer<typeof taskSchema>;
 
-const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
+const CATEGORIES = ['Chore', 'Shopping', 'Homework', 'Other'] as const;
+type Category = typeof CATEGORIES[number];
+
+const isCategory = (val?: string): val is Category => 
+  !!val && CATEGORIES.includes(val as Category);
+
+const TaskModal = ({ isOpen, onClose, onSave, task }: TaskEditModalProps) => {
   const [calendarOpen, setCalendarOpen] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<AddTaskForm>({
+  const { register, handleSubmit, control, formState: { errors, isSubmitting } } = useForm<AddTaskForm>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      dueDate: new Date(),
+      title: task?.title || '',
+      description: task?.description || '',
+      assignee: task?.assignee || undefined,
+      category: isCategory(task?.category) ? task.category : undefined,
+      dueDate: task?.due_date ? new Date(task.due_date) : new Date(),
     },
   });
-
-  useEffect(() => {
-    if (isOpen) return;
-    reset({
-      title: '',
-      description: '',
-      assignee: undefined,
-      dueDate: new Date(),
-      category: undefined,
-    });
-  }, [isOpen, reset]);
 
   const processSubmit = async (data: AddTaskForm) => {
     try {
@@ -72,28 +64,28 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
         description: data.description,
         assignee_id: data.assignee || null,
         category: data.category,
-        status: 'todo',
-        // Manual mapping to snake_case and YYYY-MM-DD string for Python
+        status: task?.status || 'todo', 
         due_date: format(data.dueDate, 'yyyy-MM-dd'), 
       };
 
-      const response = await apiClient.post<Task>('/task', taskPayload);
+      const response = task 
+        ? await apiClient.patch<Task>(`/task/${task.id}`, taskPayload)
+        : await apiClient.post<Task>('/task', taskPayload);
 
-      const createdTask = response.data;
-      await onSave(createdTask);
-
+      onSave(response.data);
       onClose();
     } catch (error) {
-      console.log(error);
-      //TODO: Error in toast
+      console.error('[TASK_SUBMIT_ERROR]', error);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Task</DialogTitle>
+          <DialogTitle>{task ? 'Edit Task' : 'Create Task'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(processSubmit)} className="space-y-5 mt-4">
           <div className="space-y-2">
@@ -192,7 +184,7 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
               className="bg-teal-600 hover:bg-teal-700 text-white"
               disabled={isSubmitting}
             >
-              Create Task
+              {task ? 'Edit Task' : 'Create Task'}
               {isSubmitting && (
                 <div className="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
               )}
@@ -204,4 +196,4 @@ const AddTask = ({ isOpen, onClose, onSave }: TaskEditModalProps) => {
   );
 };
 
-export default AddTask;
+export default TaskModal;

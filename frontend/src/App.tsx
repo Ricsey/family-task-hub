@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import './App.css';
 import Navbar from './components/Navbar';
-import AddTask from './components/task/AddTask';
+import TaskModal from './components/task/TaskModal';
 import type { Task } from './components/task/entities';
 import { useTaskModal } from './hooks/tasks';
 import TasksPage from './pages/TasksPage';
@@ -12,7 +12,7 @@ import apiClient from './services/apiClient';
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const { isOpen, openAddModal, closeModal } = useTaskModal();
+  const { isOpen, editingTask, openAddModal, openEditModal, closeModal } = useTaskModal();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -35,9 +35,6 @@ function App() {
   }, []);
 
   // Handlers
-  const handleAddTask = (task: Task) => {
-    setTasks([task, ...tasks]);
-  };
 
   const handleUpdateTask = useCallback((updatedTask: Task) => {
     setTasks((prev) =>
@@ -48,6 +45,15 @@ function App() {
   const handleDeleteTask = useCallback((taskId: string) => {
     setTasks((prev) => prev.filter((task) => task.id !== taskId));
   }, []);
+
+  const handleSaveTask = (savedTask: Task) => {
+    setTasks((prev) => {
+      const exists = prev.find(t => t.id === savedTask.id);
+      if (exists) return prev.map(t => t.id === savedTask.id ? savedTask : t);
+      return [savedTask, ...prev];
+    });
+  };
+
 
   return (
     <div>
@@ -60,13 +66,14 @@ function App() {
               <TasksPage
                 tasks={tasks}
                 onUpdateTask={handleUpdateTask}
+                onEditTask={openEditModal}
                 onDeleteTask={handleDeleteTask}
               />
             }
           />
         </Routes>
       </main>
-      <AddTask isOpen={isOpen} onClose={closeModal} onSave={handleAddTask} />
+      <TaskModal key={editingTask?.id || 'new'} isOpen={isOpen} onClose={closeModal} onSave={handleSaveTask} task={editingTask}/>
     </div>
   );
 }

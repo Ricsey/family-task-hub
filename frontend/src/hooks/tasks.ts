@@ -3,28 +3,28 @@ import { useCallback, useState } from 'react';
 
 export function useTaskModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editingTask, setEditingTask] = useState<Task>();
 
   const openAddModal = useCallback(() => {
-    setEditingTask(null);
+    setEditingTask(undefined);
     setIsOpen(true);
   }, []);
 
-  const openEditModal = useCallback((task: Task) => {
+  const openTaskModal = useCallback((task: Task) => {
     setEditingTask(task);
     setIsOpen(true);
   }, []);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
-    setEditingTask(null);
+    setEditingTask(undefined);
   }, []);
 
   return {
     isOpen,
     editingTask,
     openAddModal,
-    openEditModal,
+    openEditModal: openTaskModal,
     closeModal,
   };
 }

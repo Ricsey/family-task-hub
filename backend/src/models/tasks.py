@@ -42,3 +42,12 @@ class TaskPublic(TaskBase):
 
 
 class TaskCreate(TaskBase): ...
+
+
+class TaskUpdate(SQLModel):
+    title: str | None = None
+    description: str | None = None
+    assignee_id: uuid.UUID | None = None
+    category: TaskCategory | None = None
+    due_date: date | None = None
+    status: TaskStatus | None = None
