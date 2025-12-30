@@ -4,7 +4,7 @@ from sqlmodel import select
 from src.api.deps import SessionDep
 from src.models.tasks import Task, TaskCategory, TaskCreate, TaskUpdate
 
-router = APIRouter(prefix="/task", tags=["task"])
+router = APIRouter(prefix="/tasks", tags=["task"])
 
 
 @router.get("/")

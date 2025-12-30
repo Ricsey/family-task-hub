@@ -1,3 +1,5 @@
+export type TaskStatus = 'todo' | 'in-progress' | 'completed';
+
 export interface Task {
   id: string;
   title: string;
@@ -5,5 +7,5 @@ export interface Task {
   assignee?: string;
   category: 'Chore' | 'Homework' | 'Shopping' | 'Other';
   due_date: Date;
-  status: 'todo' | 'in-progress' | 'completed';
+  status: TaskStatus;
 }

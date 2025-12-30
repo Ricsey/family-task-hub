@@ -5,7 +5,7 @@ interface Entity {
 }
 
 class HttpService {
-  endpoint: string;
+  private endpoint: string;
 
   constructor(endpoint: string) {
     this.endpoint = endpoint;

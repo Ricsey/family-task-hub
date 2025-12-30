@@ -1,3 +1,3 @@
 import create from './httpService';
 
-export default create('/task/category/');
+export default create('/tasks/category/');
