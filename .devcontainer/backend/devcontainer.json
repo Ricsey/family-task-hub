@@ -20,7 +20,8 @@
         "shardulm94.trailing-spaces",
         "tamasfe.even-better-toml",
         "vscode-icons-team.vscode-icons",
-        "waderyan.gitblame"
+        "waderyan.gitblame",
+        "editorconfig.editorconfig"
       ]
     }
   },
