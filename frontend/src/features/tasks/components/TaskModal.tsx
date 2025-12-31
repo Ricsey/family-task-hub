@@ -4,35 +4,35 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import type { Task } from '../types';
+import { useTaskModal } from '../stores/taskModalStore';
 import TaskForm from './TaskForm';
 
-interface TaskModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (task: Task) => void;
-  task?: Task;
-}
+const TaskModal = () => {
+  const { isOpen, closeModal } = useTaskModal();
 
-const TaskModal = ({ isOpen, onClose, onSave, task }: TaskModalProps) => {
+  const handleOpenChange = (open: boolean) => {
+    if (!open) closeModal();
+  };
 
   if (!isOpen) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{task ? 'Edit Task' : 'Create Task'}</DialogTitle>
+          <DialogTitle>
+            <ModalTitle />
+          </DialogTitle>
         </DialogHeader>
-        <TaskForm
-          key={task?.id ?? 'new-task'}
-          task={task}
-          onSave={onSave}
-          onCancel={onClose}
-        />
+        <TaskForm />
       </DialogContent>
     </Dialog>
   );
 };
 
 export default TaskModal;
+
+const ModalTitle = () => {
+  const { mode } = useTaskModal();
+  return mode === 'edit' ? 'Edit Task' : 'Create Task';
+};

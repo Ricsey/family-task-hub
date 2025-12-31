@@ -1,16 +1,16 @@
+import { useTaskModal } from '@/features/tasks/stores/taskModalStore';
 import { Calendar, HomeIcon, List, PlusIcon } from 'lucide-react';
 import { NavLink } from 'react-router';
 import { Button } from './ui/button';
 
-interface NavbarProps {
-  onAddTask: () => void;
-}
+const Navbar = () => {
+  const {openCreateModal} = useTaskModal()
 
-const Navbar = ({ onAddTask }: NavbarProps) => {
   const navItems = [
     { path: '/tasks', label: 'Tasks', icon: List },
     { path: '/calendar', label: 'Calendar', icon: Calendar },
   ];
+
   return (
     <nav className="bg-white border-b top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +46,7 @@ const Navbar = ({ onAddTask }: NavbarProps) => {
           </div>
 
           {/* Add Task button */}
-          <Button className="bg-teal-600 hover:bg-teal-700" onClick={onAddTask}>
+          <Button className="bg-teal-600 hover:bg-teal-700" onClick={openCreateModal}>
             <PlusIcon />
             <span className="hidden sm:inline">Add Task</span>
           </Button>

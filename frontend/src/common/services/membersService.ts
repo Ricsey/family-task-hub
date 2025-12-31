@@ -7,6 +7,7 @@ class MemberService extends HttpService<Member> {
   }
 
   override getAll = async (): Promise<Member[]> => {
+    //TODO: Mocked data until we have members in backend!
     return [
       { id: '1', name: 'Mom' },
       { id: '2', name: 'Dad' },
@@ -14,7 +15,5 @@ class MemberService extends HttpService<Member> {
     ];
   };
 }
-
-//TODO: Mock, cause there are no members in database!
 
 export const memberService = new MemberService();

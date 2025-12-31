@@ -3,47 +3,80 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useCreateTask, useTask, useUpdateTask } from '../hooks/useTasks';
 import { taskSchema, type AddTaskForm } from '../schema';
-import { taskService } from '../services';
-import type { Task } from '../types';
+import { useTaskModal } from '../stores/taskModalStore';
 import AssigneeSelect from './AssigneeSelect';
 import CategorySelect from './CategorySelect';
 import DuedateSelect from './DuedateSelect';
 
-interface TaskFormProps {
-  task?: Task;
-  onSave: (task: Task) => void;
-  onCancel: () => void;
-}
+const TaskForm = () => {
+  const {mode, currentTask, resetModal, closeModal} = useTaskModal();
 
-const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
+  const { data: task } = useTask(currentTask?.id || '');
+
+  const createTaskMutation = useCreateTask();
+  const updateTaskMutation = useUpdateTask();
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
+    reset
   } = useForm<AddTaskForm>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      title: task?.title || '',
-      description: task?.description || '',
-      assignee: task?.assignee || undefined,
-      category: task?.category || undefined,
-      due_date: task?.due_date ? new Date(task.due_date) : new Date(),
+      title: currentTask?.title || '',
+      description: currentTask?.description || '',
+      assignee: currentTask?.assignee || undefined,
+      category: currentTask?.category || undefined,
+      due_date: currentTask?.due_date ? new Date(currentTask.due_date) : new Date(),
     },
   });
 
+  // Reset form when task changes
+  useEffect(() => {
+    if (task) {
+      reset({
+        title: task.title || '',
+        description: task.description || '',
+        assignee: task.assignee || undefined,
+        category: task.category || undefined,
+        due_date: task.due_date ? new Date(task.due_date) : new Date(),
+      });
+    } else {
+      // Reset to defaults for create mode
+      reset({
+        title: '',
+        description: '',
+        assignee: undefined,
+        category: undefined,
+        due_date: new Date(),
+      });
+    }
+  }, [task, reset, mode]);
+
   const onSubmit = async (data: AddTaskForm) => {
     try {
-      const payload: Omit<Task, 'id'> = {
+    if (mode === 'create') {
+      const taskData = {
         ...data,
-        status: task?.status || 'todo',
+        status: 'todo' as const,
       };
-      const result = await taskService.save(payload, task?.id);
-      onSave(result);
+      await createTaskMutation.mutateAsync(taskData);
+    } else if (currentTask?.id) {
+      await updateTaskMutation.mutateAsync({
+        id: currentTask.id,
+        ...data
+      });
+    }
+
+      closeModal();
     } catch (error) {
-      console.error(error)
+      console.error('Failed to save task: ', error)
     }
   };
 
@@ -131,7 +164,7 @@ const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
       </div>
 
       <div className="flex justify-end gap-3 pt-4">
-        <Button type="button" variant="ghost" onClick={onCancel}>
+        <Button type="button" variant="ghost" onClick={closeModal}>
           Cancel
         </Button>
         <Button
@@ -139,7 +172,7 @@ const TaskForm = ({ task, onSave, onCancel }: TaskFormProps) => {
           className="bg-teal-600 hover:bg-teal-700 text-white"
           disabled={isSubmitting}
         >
-          {task ? 'Edit Task' : 'Create Task'}
+          {mode === 'edit' ? 'Edit Task' : 'Create Task'}
           {isSubmitting && (
             <div className="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
           )}

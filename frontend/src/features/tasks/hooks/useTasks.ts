@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { taskService } from "../services/";
+import type { Task } from "../types";
 
 const taskKeys = {
   all: ['tasks'] as const,
@@ -37,7 +38,8 @@ export const useCreateTask = () => {
 export const useUpdateTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: taskService.update,
+    mutationFn: ({ id, ...updates }: { id: string | number } & Partial<Task>) =>
+      taskService.update(id, updates),
     onSuccess: (updated) => {
       queryClient.setQueryData(taskKeys.detail(updated.id), updated);
       queryClient.invalidateQueries({ queryKey: taskKeys.lists() })
