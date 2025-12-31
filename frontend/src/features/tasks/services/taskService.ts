@@ -14,7 +14,7 @@ import { fromApiTask, toApiTask } from "../utils/transorm";
 
   class TaskService extends TransformedHttpService<Task, TaskApi> {
     constructor() {
-      super('/tasks', fromApiTask, toApiTask);
+      super('/tasksx', fromApiTask, toApiTask);
     }
   }
 
