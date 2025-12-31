@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { useCreateTask, useTask, useUpdateTask } from '../hooks/useTasks';
 import { taskSchema, type AddTaskForm } from '../schema';
 import { useTaskModal } from '../stores/taskModalStore';
@@ -13,7 +14,7 @@ import CategorySelect from './CategorySelect';
 import DuedateSelect from './DuedateSelect';
 
 const TaskForm = () => {
-  const {mode, currentTask, closeModal} = useTaskModal();
+  const { mode, currentTask, closeModal } = useTaskModal();
 
   const { data: task } = useTask(currentTask?.id || '');
 
@@ -25,7 +26,7 @@ const TaskForm = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-    reset
+    reset,
   } = useForm<AddTaskForm>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -33,7 +34,9 @@ const TaskForm = () => {
       description: currentTask?.description || '',
       assignee: currentTask?.assignee || undefined,
       category: currentTask?.category || undefined,
-      due_date: currentTask?.due_date ? new Date(currentTask.due_date) : new Date(),
+      due_date: currentTask?.due_date
+        ? new Date(currentTask.due_date)
+        : new Date(),
     },
   });
 
@@ -61,22 +64,35 @@ const TaskForm = () => {
 
   const onSubmit = async (data: AddTaskForm) => {
     try {
-    if (mode === 'create') {
-      const taskData = {
-        ...data,
-        status: 'todo' as const,
-      };
-      await createTaskMutation.mutateAsync(taskData);
-    } else if (currentTask?.id) {
-      await updateTaskMutation.mutateAsync({
-        id: currentTask.id,
-        ...data
-      });
-    }
+      if (mode === 'create') {
+        const taskData = {
+          ...data,
+          status: 'todo' as const,
+        };
+        await createTaskMutation.mutateAsync(taskData);
+
+        toast.success('Task created successfully', {
+          description: `"${data.title}" has been added to tasks.`,
+        });
+      } else if (currentTask?.id) {
+        await updateTaskMutation.mutateAsync({
+          id: currentTask.id,
+          ...data,
+        });
+
+        toast.success('Task updated successfully', {
+          description: `"${data.title}" has been updated.`,
+        });
+      }
 
       closeModal();
     } catch (error) {
-      console.error('Failed to save task: ', error)
+      toast.error('Failed to save task', {
+        description:
+          mode === 'create'
+            ? 'Could not create task. Please try again.'
+            : 'Could not update task. Please try again.',
+      });
     }
   };
 

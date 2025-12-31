@@ -1,4 +1,5 @@
 // layouts/MainLayout.tsx
+import ToastProvider from '@/common/providers/toastProvider';
 import Navbar from '@/components/Navbar';
 import TaskModal from '@/features/tasks/components/TaskModal';
 import { Outlet } from 'react-router';
@@ -14,6 +15,7 @@ const MainLayout = () => {
       </main>
 
       <TaskModal />
+      <ToastProvider />
     </div>
   );
 };
