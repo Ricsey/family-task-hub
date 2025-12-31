@@ -13,7 +13,7 @@ import CategorySelect from './CategorySelect';
 import DuedateSelect from './DuedateSelect';
 
 const TaskForm = () => {
-  const {mode, currentTask, resetModal, closeModal} = useTaskModal();
+  const {mode, currentTask, closeModal} = useTaskModal();
 
   const { data: task } = useTask(currentTask?.id || '');
 

@@ -29,13 +29,7 @@ const CategorySelect = ({
       <SelectContent>
         {categories?.map((cat) => (
           <SelectItem key={cat} value={cat}>
-            <div className="flex items-center gap-2">
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: getCategoryColor(cat) }}
-              />
-              {cat}
-            </div>
+            <CategoryItem category={cat} />
           </SelectItem>
         ))}
       </SelectContent>
@@ -44,3 +38,16 @@ const CategorySelect = ({
 };
 
 export default CategorySelect;
+
+
+const CategoryItem = ({category}: {category: string}) => {
+  return (
+    <div className="flex items-center gap-2">
+      <div
+        className="w-3 h-3 rounded-full"
+        style={{ backgroundColor: getCategoryColor(category) }}
+      />
+      {category}
+    </div>
+  );
+};
