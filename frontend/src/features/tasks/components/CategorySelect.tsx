@@ -1,3 +1,4 @@
+import { useCategories } from '@/common/hooks/useCategories';
 import {
   Select,
   SelectContent,
@@ -5,7 +6,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import useCategory from '@/hooks/useCategory';
 import { getCategoryColor } from '../config/categories';
 
 interface CategoryEditProps {
@@ -19,7 +19,7 @@ const CategorySelect = ({
   onCategoryChange,
   id,
 }: CategoryEditProps) => {
-  const { categories } = useCategory();
+  const { data: categories } = useCategories();
 
   return (
     <Select value={selectedCategory} onValueChange={onCategoryChange}>
@@ -27,7 +27,7 @@ const CategorySelect = ({
         <SelectValue placeholder="Select category" />
       </SelectTrigger>
       <SelectContent>
-        {categories.map((cat) => (
+        {categories?.map((cat) => (
           <SelectItem key={cat} value={cat}>
             <div className="flex items-center gap-2">
               <div
