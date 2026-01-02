@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { Task } from "../types";
 
 export interface Filters {
@@ -9,22 +10,25 @@ export interface Filters {
 
 
 export const useFilterTasks = (tasks: Task[], filters: Filters) => {
-  const searchQuery = filters.searchQuery.trim();
+  return useMemo(() => {
 
-  const processed = tasks.filter((t) => {
-    const matchesSearch = !searchQuery ||
-      `${t.title} ${t.description ?? ''}`.toLowerCase().includes(searchQuery);
-    const matchesCat = filters.category === 'all' || t.category === filters.category;
-    const matchesUser = filters.assignee === 'all' || t.assignee === filters.assignee;
+    const searchQuery = filters.searchQuery.trim();
 
-    return matchesSearch && matchesCat && matchesUser;
-  });
+    const processed = tasks.filter((t) => {
+      const matchesSearch = !searchQuery ||
+        `${t.title} ${t.description ?? ''}`.toLowerCase().includes(searchQuery);
+      const matchesCat = filters.category === 'all' || t.category === filters.category;
+      const matchesUser = filters.assignee === 'all' || t.assignee === filters.assignee;
 
-  if (filters.sortBy === 'dueDate') {
-    return [...processed].sort((a, b) =>
-      new Date(a.due_date).getTime() - new Date(b.due_date).getTime()
-    );
-  }
+      return matchesSearch && matchesCat && matchesUser;
+    });
 
-  return [...processed].sort((a, b) => a.title.localeCompare(b.title));
+    if (filters.sortBy === 'dueDate') {
+      return [...processed].sort((a, b) =>
+        new Date(a.due_date).getTime() - new Date(b.due_date).getTime()
+      );
+    }
+
+    return [...processed].sort((a, b) => a.title.localeCompare(b.title));
+  }, [tasks, filters])
 }

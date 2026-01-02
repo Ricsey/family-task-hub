@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Filter, SortAsc, User } from 'lucide-react';
+import { memo } from 'react';
 import type { Filters } from '../hooks/useFilterTasks';
 import SearchField from './SearchField';
 
@@ -18,7 +19,7 @@ interface TaskFilterFormProps {
   onSearchChanged: (value: string) => void;
 }
 
-const TaskFilterForm = ({
+const TaskFilterForm = memo(({
   filters,
   onSelectCategory,
   onSelectAssignee,
@@ -41,9 +42,9 @@ const TaskFilterForm = ({
           <SelectValue placeholder="Category" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All Categories</SelectItem>
+          <SelectItem key='all' value="all">All Categories</SelectItem>
           {categories?.map(category =>
-            <SelectItem value={category}>{category}</SelectItem>
+            <SelectItem key={category} value={category}>{category}</SelectItem>
           )}
         </SelectContent>
       </Select>
@@ -58,9 +59,9 @@ const TaskFilterForm = ({
           <SelectValue placeholder="Assignee" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All Members</SelectItem>
-          <SelectItem value="Mom">Mom</SelectItem>
-          <SelectItem value="Dad">Dad</SelectItem>
+          <SelectItem key='all' value="all">All Members</SelectItem>
+          <SelectItem key='Mom' value="Mom">Mom</SelectItem>
+          <SelectItem key='Dad' value="Dad">Dad</SelectItem>
         </SelectContent>
       </Select>
 
@@ -71,12 +72,12 @@ const TaskFilterForm = ({
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="dueDate">Due Date (Ascending)</SelectItem>
-          <SelectItem value="title">Title</SelectItem>
+          <SelectItem key='dueDate' value="dueDate">Due Date (Ascending)</SelectItem>
+          <SelectItem key='title' value="title">Title</SelectItem>
         </SelectContent>
       </Select>
     </div>
   );
-};
+});
 
 export default TaskFilterForm;

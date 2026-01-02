@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { memo } from 'react';
 import { getCategoryColor } from '../config/categories';
 import type { Task } from '../types';
 import TaskActions from './TaskActions';
@@ -14,7 +15,7 @@ interface TaskCardProps {
   // onDelete: (taskId: string) => void;
 }
 
-const TaskCard = ({
+const TaskCard = memo(({
   task,
   // onToggleStatus,
   // onEdit,
@@ -82,6 +83,6 @@ const TaskCard = ({
       </div>
     </Card>
   );
-};
+});
 
 export default TaskCard;

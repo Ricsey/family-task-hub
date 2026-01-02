@@ -1,11 +1,9 @@
 import { Card } from '@/components/ui/card';
-import { useState } from 'react';
+import { useCallback, useDeferredValue, useState } from 'react';
 import TaskFilterForm from '../components/TaskFilterForm';
 import TasksGrid from '../components/TasksGrid';
 import { useFilterTasks, type Filters } from '../hooks/useFilterTasks';
 import { useTasks } from '../hooks/useTasks';
-
-
 
 const TasksPage = () => {
   const { data: tasks } = useTasks();
@@ -16,15 +14,27 @@ const TasksPage = () => {
     sortBy: 'dueDate',
   });
 
+  const deferredFilters = useDeferredValue(filters);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, searchQuery: value }));
+  }, []);
+
+  const handleCategoryChange = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, category: value }));
+  }, []);
+
+  const handleAssigneeChange = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, assignee: value }));
+  }, []);
+
+  const handleSortChange = useCallback((value: 'dueDate' | 'title') => {
+    setFilters((prev) => ({ ...prev, sortBy: value }));
+  }, []);
+
+  const filteredTasks = useFilterTasks(tasks ?? [], deferredFilters);
 
   if (!tasks) return null; //TODO: Empty card with clear filters
-
-  const handleSearchChange = (value: string) => setFilters({ ...filters, searchQuery: value });
-  const handleCategoryChange = (value: string) => setFilters({ ...filters, category: value });
-  const handleAssigneeChange = (value: string) => setFilters({ ...filters, assignee: value });
-  const handleSortChange = (value: 'dueDate' | 'title') => setFilters({ ...filters, sortBy: value });
-
-  const filteredTasks = useFilterTasks(tasks, filters);
 
   return (
     <div>
