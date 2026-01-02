@@ -1,16 +1,22 @@
-import { isPast, isToday, startOfDay } from 'date-fns';
+import { format, isPast, isToday, isTomorrow, startOfDay } from 'date-fns';
 import { Calendar } from 'lucide-react';
-import { formatDueDate } from './utils';
 
 interface TaskDueDateProps {
   dueDate: Date;
   isDone: boolean;
 }
 
+//TODO: Maybe this goes to utils?
+export function formatDueDate(date: Date): string {
+  if (isToday(date)) return 'Today';
+  if (isTomorrow(date)) return 'Tomorrow';
+  return format(date, 'MMM d');
+}
+
 const TaskDueDate = ({ dueDate, isDone }: TaskDueDateProps) => {
   const dateToCheck = startOfDay(dueDate);
   const isOverDue = isPast(dateToCheck) && !isToday(dateToCheck) && !isDone;
-  
+
   const renderedDate = formatDueDate(dueDate);
 
   return (

@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { getCategoryColors } from './categoryColors';
-import { type Task } from './entities';
+import { getCategoryColor } from '../config/categories';
+import type { Task } from '../types';
 import TaskActions from './TaskActions';
 import TaskAssignee from './TaskAssignee';
 import TaskCategory from './TaskCategory';
@@ -9,25 +9,24 @@ import TaskDueDate from './TaskDueDate';
 
 interface TaskCardProps {
   task: Task;
-  onToggleStatus: () => void;
-  onEdit: (task: Task) => void;
-  onDelete: (taskId: string) => void;
+  // onToggleStatus: () => void;
+  // onEdit: (task: Task) => void;
+  // onDelete: (taskId: string) => void;
 }
 
 const TaskCard = ({
   task,
-  onToggleStatus,
-  onEdit,
-  onDelete,
+  // onToggleStatus,
+  // onEdit,
+  // onDelete,
 }: TaskCardProps) => {
-  const categoryColors = getCategoryColors(task.category);
-
   const isDone = task.status === 'completed';
 
   return (
     <Card
       className={`p-4 border-l-4 ${
-        categoryColors.border
+        getCategoryColor(task.category).border}
+        "bg-red-400"
       } bg-white hover:shadow-md transition-shadow duration-200 ${
         isDone ? 'opacity-60' : ''
       }`}
@@ -36,8 +35,8 @@ const TaskCard = ({
         {/* Checkbox */}
         <Checkbox
           className="mt-1 border-stone-300 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
-          checked={isDone}
-          onCheckedChange={onToggleStatus}
+          // checked={isDone}
+          // onCheckedChange={onToggleStatus}
         />
 
         {/* Content */}
@@ -57,7 +56,9 @@ const TaskCard = ({
             </div>
 
             {/* Actions */}
-            <TaskActions task={task} onEdit={onEdit} onDelete={onDelete} />
+            <TaskActions task={task}
+            // onEdit={onEdit} onDelete={onDelete}
+            />
           </div>
 
           {/* Meta info */}

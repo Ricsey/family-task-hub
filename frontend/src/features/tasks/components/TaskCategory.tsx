@@ -1,16 +1,16 @@
 import { Badge } from '@/components/ui/badge';
-import { getCategoryColors } from './categoryColors';
+import { getCategoryColor } from '../config/categories';
 
 interface TaskCategoryProps {
   categoryName: string;
 }
 
 const TaskCategory = ({ categoryName }: TaskCategoryProps) => {
-  const categoryColor = getCategoryColors(categoryName);
+  const color = getCategoryColor(categoryName)
   return (
     <Badge
       variant="secondary"
-      className={`text-xs ${categoryColor.background} ${categoryColor.text} font-semibold`}
+      className={`text-xs ${color.text} ${color.bg} font-semibold`}
     >
       {categoryName}
     </Badge>
