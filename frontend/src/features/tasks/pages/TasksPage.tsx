@@ -1,18 +1,18 @@
 import { Card } from '@/components/ui/card';
 import { useCallback, useDeferredValue, useState } from 'react';
+import EmptyTasks from '../components/EmptyTasks';
 import TaskFilterForm from '../components/TaskFilterForm';
 import TasksGrid from '../components/TasksGrid';
-import { useFilterTasks, type Filters } from '../hooks/useFilterTasks';
+import {
+  INITIAL_FILTERS,
+  useFilterTasks,
+  type Filters,
+} from '../hooks/useFilterTasks';
 import { useTasks } from '../hooks/useTasks';
 
 const TasksPage = () => {
   const { data: tasks } = useTasks();
-  const [filters, setFilters] = useState<Filters>({
-    searchQuery: '',
-    category: 'all',
-    assignee: 'all',
-    sortBy: 'dueDate',
-  });
+  const [filters, setFilters] = useState<Filters>(INITIAL_FILTERS);
 
   const deferredFilters = useDeferredValue(filters);
 
@@ -32,22 +32,33 @@ const TasksPage = () => {
     setFilters((prev) => ({ ...prev, sortBy: value }));
   }, []);
 
-  const filteredTasks = useFilterTasks(tasks ?? [], deferredFilters);
+  const handleFilterReset = useCallback(() => setFilters(INITIAL_FILTERS), []);
 
-  if (!tasks) return null; //TODO: Empty card with clear filters
+  const { filteredTasks, isDirty } = useFilterTasks(
+    tasks ?? [],
+    deferredFilters
+  );
+
+  if (!tasks) return null;
 
   return (
     <div>
       <Card className="p-4 mb-8">
         <TaskFilterForm
           filters={filters}
+          isDirty={isDirty}
           onSearchChanged={handleSearchChange}
           onSelectAssignee={handleAssigneeChange}
           onSelectCategory={handleCategoryChange}
           onSelectSortBy={handleSortChange}
+          onResetFilter={handleFilterReset}
         />
       </Card>
-      {tasks && <TasksGrid tasks={filteredTasks} />}
+      {filteredTasks.length > 0 ? (
+        <TasksGrid tasks={filteredTasks} />
+      ) : (
+        <EmptyTasks onReset={handleFilterReset} />
+      )}
     </div>
   );
 };
