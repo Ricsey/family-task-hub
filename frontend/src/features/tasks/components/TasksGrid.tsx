@@ -1,9 +1,11 @@
-import { useTasks } from "../hooks/useTasks"
+import type { Task } from "../types"
 import TaskCard from "./TaskCard"
 
-const TasksGrid = () => {
-  const {data: tasks} = useTasks()
+interface TasksGridProps {
+  tasks: Task[]
+}
 
+const TasksGrid = ({tasks}: TasksGridProps) => {
   return (
     <div className="flex flex-col gap-4">
       {tasks?.map((task) => <TaskCard task={task}/>)}

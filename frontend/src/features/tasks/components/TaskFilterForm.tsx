@@ -1,41 +1,39 @@
-import { Filter, SortAsc, User } from 'lucide-react';
+import { useCategories } from '@/common/hooks/useCategories';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from '@/components/ui/select';
+import { Filter, SortAsc, User } from 'lucide-react';
+import type { Filters } from '../hooks/useFilterTasks';
 import SearchField from './SearchField';
 
 interface TaskFilterFormProps {
-  filterCategory: string;
-  filterAssignee: string;
-  searchQuery: string;
-  sortBy: string;
+  filters: Filters
   onSelectCategory: (category: string) => void;
   onSelectAssignee: (assignee: string) => void;
-  onSelectSortBy: (sortBy: string) => void;
+  onSelectSortBy: (sortBy: "dueDate" | "title") => void;
   onSearchChanged: (value: string) => void;
 }
 
 const TaskFilterForm = ({
-  filterCategory,
-  filterAssignee,
-  searchQuery,
-  sortBy,
+  filters,
   onSelectCategory,
   onSelectAssignee,
   onSelectSortBy,
   onSearchChanged,
 }: TaskFilterFormProps) => {
+  const {data: categories} = useCategories()
+
   return (
     <div className="flex flex-col lg:flex-row gap-4">
-      <SearchField value={searchQuery} onTextChange={onSearchChanged} />
+      <SearchField value={filters.searchQuery} onTextChange={onSearchChanged} />
 
       {/* Category filter */}
       <Select
-        value={filterCategory}
+        value={filters.category}
         onValueChange={(value) => onSelectCategory(value)}
       >
         <SelectTrigger className="w-full lg:w-45">
@@ -44,15 +42,15 @@ const TaskFilterForm = ({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Categories</SelectItem>
-          <SelectItem value="Homework">Homework</SelectItem>
-          <SelectItem value="Chore">Chore</SelectItem>
-          <SelectItem value="Other">Other</SelectItem>
+          {categories?.map(category =>
+            <SelectItem value={category}>{category}</SelectItem>
+          )}
         </SelectContent>
       </Select>
 
       {/* Assignee filter */}
       <Select
-        value={filterAssignee}
+        value={filters.assignee}
         onValueChange={(value) => onSelectAssignee(value)}
       >
         <SelectTrigger className="w-full lg:w-45">
@@ -67,7 +65,7 @@ const TaskFilterForm = ({
       </Select>
 
       {/* Sort by */}
-      <Select value={sortBy} onValueChange={onSelectSortBy}>
+      <Select value={filters.sortBy} onValueChange={onSelectSortBy}>
         <SelectTrigger className="w-full lg:w-40">
           <SortAsc className="w-4 h-4 mr-2 text-stone-400" />
           <SelectValue placeholder="Sort by" />
