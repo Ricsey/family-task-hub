@@ -6,19 +6,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { useTaskModal } from '../stores/taskModalStore';
 import type { Task } from '../types';
 
 interface TaskActionsProps {
   task: Task;
-  // onEdit: (task: Task) => void;
   // onDelete: (taskId: string) => void;
 }
 
 const TaskActions = ({
   task,
-  // onEdit,
   // onDelete
 }: TaskActionsProps) => {
+  const {openEditModal} = useTaskModal()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,7 +29,7 @@ const TaskActions = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-        // onClick={() => onEdit(task)}
+        onClick={() => openEditModal(task)}
         >
           <Pencil className="w-4 h-4 mr-2" />
           Edit
