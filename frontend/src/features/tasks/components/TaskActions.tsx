@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { useDeleteTask } from '../hooks/useTasks';
 import { useTaskModal } from '../stores/taskModalStore';
 import type { Task } from '../types';
 
@@ -19,6 +20,7 @@ const TaskActions = ({
   // onDelete
 }: TaskActionsProps) => {
   const {openEditModal} = useTaskModal()
+  const {mutate: deleteTask} = useDeleteTask()
 
   return (
     <DropdownMenu>
@@ -36,6 +38,12 @@ const TaskActions = ({
         </DropdownMenuItem>
         <DropdownMenuItem
           // onClick={() => onDelete(task.id)}
+          onClick={() => {
+            // "Are you sure?" confirmation
+            if (confirm("Are you sure you want to delete this task?")) {
+              deleteTask(task.id)
+            }
+          }}
           className="text-red-600 focus:text-red-600"
         >
           <Trash2 className="w-4 h-4 mr-2 text-red-600" />

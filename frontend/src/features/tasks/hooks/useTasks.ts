@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { taskService } from "../services/";
 import type { Task } from "../types";
 
@@ -43,7 +44,7 @@ export const useUpdateTask = () => {
     onSuccess: (updated) => {
       queryClient.setQueryData(taskKeys.detail(updated.id), updated);
       queryClient.invalidateQueries({ queryKey: taskKeys.lists() })
-    }
+    },
   })
 }
 
@@ -51,6 +52,12 @@ export const useDeleteTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: taskService.delete,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: taskKeys.all })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      toast.success("Task deleted successfully") // where should I put this?
+    },
+    onError: () => {
+      toast.error("Failed to delete task. Please try again.")
+    }
   })
 }
