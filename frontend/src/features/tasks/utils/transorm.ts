@@ -11,11 +11,15 @@ export const fromApiTask = (taskApi: TaskApi): Task => ({
 });
 
 export const formatDateForApi = (date: Date): string => {
-  // Format as YYYY-MM-DD
-  return date.toISOString().split('T')[0];
+  // Use local date components to avoid timezone issues
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 export const parseDateFromApi = (dateStr: string): Date => {
-  // Parse YYYY-MM-DD string to Date object
-  return new Date(dateStr + 'T00:00:00');
+  // Parse YYYY-MM-DD string as local date
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
 };
