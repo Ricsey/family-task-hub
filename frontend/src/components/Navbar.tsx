@@ -7,6 +7,7 @@ const Navbar = () => {
   const {openCreateModal} = useTaskModal()
 
   const navItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/tasks', label: 'Tasks', icon: List },
     { path: '/calendar', label: 'Calendar', icon: Calendar },
   ];
