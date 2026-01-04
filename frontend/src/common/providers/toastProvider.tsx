@@ -1,11 +1,5 @@
 import { Toaster } from 'sonner';
 
 export default function ToastProvider() {
-  return (
-    <Toaster
-      position="top-center"
-      richColors
-      closeButton
-    />
-  );
+  return <Toaster position="bottom-right" richColors closeButton />;
 }
