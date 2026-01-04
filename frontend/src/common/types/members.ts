@@ -1,4 +1,4 @@
 export interface Member {
   id: string; // uuid
-  name: string;
+  full_name: string;
 }

@@ -9,7 +9,7 @@ import {
 
 interface AssigneeSelectProps {
   selectedMemberId?: string;
-  onAssigneeChange: (value: string | undefined) => void;
+  onAssigneeChange: (value: string | null) => void;
 }
 
 const AssigneeSelect = ({
@@ -17,23 +17,14 @@ const AssigneeSelect = ({
   onAssigneeChange,
 }: AssigneeSelectProps) => {
   const { data: members } = useMembers();
-  const selectedMember = members?.find((m) => m.id === selectedMemberId);
 
   return (
     <Select
       value={selectedMemberId || 'none'}
-      onValueChange={(val) =>
-        onAssigneeChange(val === 'none' ? undefined : val)
-      }
+      onValueChange={(val) => onAssigneeChange(val === 'none' ? null : val)}
     >
       <SelectTrigger id="assignee-select">
         <SelectValue placeholder="Select member" />
-        {selectedMember && (
-          <div className="flex items-center gap-2">
-            <MemberAvatar name={selectedMember.name} />
-            <span className="truncate">{selectedMember.name}</span>
-          </div>
-        )}
       </SelectTrigger>
       <SelectContent>
         <SelectItem key="none" value="none">
@@ -43,8 +34,8 @@ const AssigneeSelect = ({
         {members?.map((member) => (
           <SelectItem key={member.id} value={member.id}>
             <div className="flex items-center gap-2">
-              <MemberAvatar name={member.name} />
-              <span>{member.name}</span>
+              <MemberAvatar name={member.full_name} />
+              <span>{member.full_name}</span>
             </div>
           </SelectItem>
         ))}

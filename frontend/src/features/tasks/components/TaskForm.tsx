@@ -32,7 +32,7 @@ const TaskForm = () => {
     defaultValues: {
       title: currentTask?.title || '',
       description: currentTask?.description || '',
-      assignee: currentTask?.assignee || undefined,
+      assignee_id: currentTask?.assignee_id || null,
       category: currentTask?.category || undefined,
       due_date: currentTask?.due_date
         ? new Date(currentTask.due_date)
@@ -46,7 +46,7 @@ const TaskForm = () => {
       reset({
         title: task.title || '',
         description: task.description || '',
-        assignee: task.assignee || undefined,
+        assignee_id: task.assignee_id || null,
         category: task.category || undefined,
         due_date: task.due_date ? new Date(task.due_date) : new Date(),
       });
@@ -55,7 +55,7 @@ const TaskForm = () => {
       reset({
         title: '',
         description: '',
-        assignee: undefined,
+        assignee_id: null,
         category: undefined,
         due_date: new Date(),
       });
@@ -127,17 +127,20 @@ const TaskForm = () => {
         <FormField
           label="Assignee"
           id="assignee"
-          error={errors.assignee?.message}
+          error={errors.assignee_id?.message}
         >
           <Controller
-            name="assignee"
+            name="assignee_id"
             control={control}
-            render={({ field }) => (
-              <AssigneeSelect
-                selectedMemberId={field.value}
-                onAssigneeChange={field.onChange}
-              />
-            )}
+            render={({ field }) => {
+              console.log('Field value:', field.value);
+              return (
+                <AssigneeSelect
+                  selectedMemberId={field.value ?? undefined}
+                  onAssigneeChange={field.onChange}
+                />
+              );
+            }}
           />
         </FormField>
 

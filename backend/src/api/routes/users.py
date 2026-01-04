@@ -10,7 +10,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("/")
-def read_users(session: SessionDep):
+def read_users(session: SessionDep, response_model=list[User]):
     users = session.exec(select(User)).all()
     return users
 

@@ -1,13 +1,11 @@
 import uuid
 from datetime import date
 from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
-# Just for ty to not show missing import error
-if TYPE_CHECKING:
-    from src.models.users import User
+from src.models.users import User, UserPublic
 
 
 class TaskCategory(str, Enum):
@@ -34,11 +32,12 @@ class TaskBase(SQLModel):
 
 class Task(TaskBase, table=True):
     id: int = Field(default=None, primary_key=True)
-    assignee: Optional["User"] = Relationship(back_populates="tasks")
+    assignee: Optional[User] = Relationship(back_populates="tasks")
 
 
 class TaskPublic(TaskBase):
     id: int
+    assignee: Optional[UserPublic] = None
 
 
 class TaskCreate(TaskBase): ...

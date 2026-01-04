@@ -6,7 +6,7 @@ export const taskSchema = z.object({
     .string()
     .min(1, 'Description is required')
     .max(500, 'Description cannot exceed 500 characters'),
-  assignee: z.string().optional(),
+  assignee_id: z.string().nullable().optional(),
   due_date: z.date({ error: 'Due date is required' }),
   category: z.enum(
     ['Chore', 'Shopping', 'Homework', 'Other'],
