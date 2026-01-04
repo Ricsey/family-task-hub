@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { toast } from "sonner";
 import { taskService } from "../services/";
 import type { Task } from "../types";
@@ -61,3 +62,28 @@ export const useDeleteTask = () => {
     }
   })
 }
+
+export const useTasksByCategory = () => {
+  const { data: tasks, isLoading, error } = useTasks();
+
+  const stats = useMemo(() => {
+    if (!tasks || tasks.length === 0) return null;
+
+    const counts = tasks.reduce((acc, task) => {
+      acc[task.category] = (acc[task.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const total = tasks.length;
+
+    const categoryStats = Object.entries(counts).map(([category, count]) => ({
+      category,
+      count,
+      percentage: Math.round((count / total) * 100),
+    }));
+
+    return categoryStats;
+  }, [tasks]);
+
+  return { data: stats, isLoading, error };
+};
