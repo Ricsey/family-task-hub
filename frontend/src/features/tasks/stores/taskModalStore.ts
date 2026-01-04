@@ -21,7 +21,9 @@ export const useTaskModal = create<TaskModalStore>(
     // Actions
     openCreateModal: () => {
       set({
-        isOpen: true
+        isOpen: true,
+        mode: 'create',
+        currentTask: null,
       })
     },
 
