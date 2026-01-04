@@ -1,4 +1,5 @@
 import { useMembers } from '@/common/hooks/useMembers';
+import { getUserColor } from '@/common/utils/userColors';
 import {
   Select,
   SelectContent,
@@ -52,7 +53,11 @@ const MemberAvatar = ({ name }: { name: string }) => {
   const displayName = name?.trim() ? createAcronym(name) : '?';
 
   return (
-    <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white bg-teal-600">
+    <div
+      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white ${getUserColor(
+        name
+      )}`}
+    >
       {displayName}
     </div>
   );
