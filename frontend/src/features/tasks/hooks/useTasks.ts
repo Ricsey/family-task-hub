@@ -87,3 +87,28 @@ export const useTasksByCategory = () => {
 
   return { data: stats, isLoading, error };
 };
+
+export const useUpcomingTasks = () => {
+  const { data: tasks, isLoading, error } = useTasks();
+
+  const upcomingTasks = useMemo(() => {
+    if (!tasks) return [];
+
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    const sevenDaysFromNow = new Date();
+    sevenDaysFromNow.setDate(now.getDate() + 7);
+
+    return tasks
+      .filter(task => {
+        if(task.status === 'completed') return false;
+
+        const dueDate = new Date(task.due_date);
+        return dueDate < now || (dueDate >= now && dueDate <= sevenDaysFromNow);
+      })
+      .sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime());
+  }, [tasks]);
+
+  return { data: upcomingTasks, isLoading, error };
+};
