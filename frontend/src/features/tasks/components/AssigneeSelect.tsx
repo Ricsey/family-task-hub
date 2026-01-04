@@ -16,7 +16,9 @@ const AssigneeSelect = ({
   selectedMemberId,
   onAssigneeChange,
 }: AssigneeSelectProps) => {
-  const { data: members } = useMembers();
+  const { data: members, isLoading } = useMembers();
+
+  if (isLoading) return null;
 
   return (
     <Select
