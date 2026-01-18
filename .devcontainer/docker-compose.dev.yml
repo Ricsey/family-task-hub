@@ -1,9 +1,9 @@
 services:
   backend:
+    working_dir: /workspace/backend
     build:
-      dockerfile: Dockerfile
-      context: ./backend
-    env_file: ".env"
+      context: ../backend
+      dockerfile: ../.devcontainer/backend/Dockerfile
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -12,14 +12,16 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
     ports:
       - "8000:8000"
-    entrypoint: /code/entrypoint.sh
+    volumes:
+      - ../:/workspace:cached
+    command: sleep infinity
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
-
+  
   db:
     image: postgres:17
-    env_file: ".env"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -31,31 +33,35 @@ services:
       start_period: 3s
       timeout: 5s
     volumes:
-      - postgres-data-prod:/var/lib/postgresql/data
-
+      - postgres-data-dev:/var/lib/postgresql/data
+    
   pgadmin:
     image: dpage/pgadmin4
-    env_file: ".env"
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
-      - "8080:80"
+      - "15432:80"
     depends_on:
       - db
     volumes:
-      - pgadmin-data-prod:/var/lib/pgadmin
+      - pgadmin-data-dev:/var/lib/pgadmin
 
   frontend:
+    working_dir: /workspace/frontend
     build:
-      dockerfile: Dockerfile
-      context: ./frontend
-    entrypoint: /code/entrypoint.sh
+      context: ../frontend
+      dockerfile: ../.devcontainer/frontend/Dockerfile
+    user: "bun"
+    volumes:
+      - ../:/workspace:cached
+    command: sleep infinity
     ports:
       - "5173:5173"
     depends_on:
       - backend
+    restart: unless-stopped
 
 volumes:
-  postgres-data-prod:
-  pgadmin-data-prod:
+  postgres-data-dev:
+  pgadmin-data-dev:

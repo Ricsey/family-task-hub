@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
   "name": "Backend",
-  "dockerComposeFile": ["../../docker-compose.yml", "../../docker-compose.override.yml"],
+  "dockerComposeFile": "../docker-compose.dev.yml",
   "service": "backend",
   "workspaceFolder": "/workspace/backend",
   // Use 'forwardPorts' to make a list of ports inside the container available locally.

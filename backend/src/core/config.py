@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = Field(init=False)
     POSTGRES_PASSWORD: str = Field(init=False)
     POSTGRES_SERVER: str = Field(
-        "localhost", init=False
+        "db", init=False
     )  # Default value for Docker setup
     POSTGRES_PORT: str = Field("5432", init=False)
 
