@@ -1,25 +1,11 @@
 services:
-  backend:
-    working_dir: /workspace/backend
-    build:
-      context: ../backend
-      dockerfile: ../.devcontainer/backend/Dockerfile
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_SERVER: ${POSTGRES_SERVER}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-    ports:
-      - "8000:8000"
+  devcontainer:
+    image: "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04"
+    env_file: .env
     volumes:
-      - ../:/workspace:cached
+      - ../:/workspaces/family-task-hub:cached
     command: sleep infinity
-    restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
-  
+
   db:
     image: postgres:17
     environment:
@@ -34,7 +20,7 @@ services:
       timeout: 5s
     volumes:
       - postgres-data-dev:/var/lib/postgresql/data
-    
+
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -46,21 +32,6 @@ services:
       - db
     volumes:
       - pgadmin-data-dev:/var/lib/pgadmin
-
-  frontend:
-    working_dir: /workspace/frontend
-    build:
-      context: ../frontend
-      dockerfile: ../.devcontainer/frontend/Dockerfile
-    user: "bun"
-    volumes:
-      - ../:/workspace:cached
-    command: sleep infinity
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-    restart: unless-stopped
 
 volumes:
   postgres-data-dev:
