@@ -31,7 +31,7 @@ export const useFilterTasks = (tasks: Task[], filters: Filters) => {
     const processed = tasks.filter((t) => {
       const matchesSearch =
         !searchQuery ||
-        `${t.title} ${t.description ?? ''}`.toLowerCase().includes(searchQuery);
+        `${t.title} ${t.description ?? ''}`.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCat =
         filters.category === 'all' || t.category === filters.category;
       const matchesUser =
