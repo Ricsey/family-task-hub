@@ -7,19 +7,14 @@ from src.api.routes.users import router as users_router
 # from src.core.db import create_db_and_tables
 
 
-async def lifespan(app: FastAPI):
-    # create_db_and_tables()
-    yield
-
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
+        "http://localhost:8000",
         "http://localhost:5173",
-        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
         "http://127.0.0.1:5173",
     ],
     allow_credentials=True,
