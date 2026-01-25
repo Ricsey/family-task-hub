@@ -1,0 +1,29 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+  "name": "Backend",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "backend",
+  "workspaceFolder": "/workspace/backend",
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [
+    8000,
+    5678
+  ],
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astral-sh.ty@prerelease",
+        "charliermarsh.ruff",
+        "redhat.vscode-yaml",
+        "shardulm94.trailing-spaces",
+        "tamasfe.even-better-toml",
+        "vscode-icons-team.vscode-icons",
+        "waderyan.gitblame",
+        "editorconfig.editorconfig"
+      ]
+    }
+  },
+  "postCreateCommand": "bash ../.devcontainer/backend/setup.sh"
+}

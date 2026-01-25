@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.17.2",
     "fastapi[standard]>=0.124.2",
     "psycopg2-binary>=2.9.11",
     "pydantic-settings>=2.12.0",
@@ -14,5 +15,22 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pytest>=9.0.2",
     "ty>=0.0.1a34",
+    "pytest",
+    "pytest-asyncio", # Essential for testing async endpoints
+    "httpx",          # Required for FastAPI's TestClient
+    "debugpy>=1.8.19",
 ]
+
+[tool.pytest.ini_options]
+# Set the root for imports so 'src.models' works correctly
+pythonpath = ["."]
+
+testpaths = ["tests"]
+
+# Auto-detect async tests without needing @pytest.mark.asyncio every time
+asyncio_mode = "auto"
+
+# Optional: Add clear, colorful output and standard markers
+addopts = "-v --tb=short"

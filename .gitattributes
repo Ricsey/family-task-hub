@@ -1,0 +1,50 @@
+# ==== Text files ====
+# Treat all source code as text and normalize line endings
+# React / JS / TS
+*.js      text eol=lf
+*.jsx     text eol=lf
+*.ts      text eol=lf
+*.tsx     text eol=lf
+
+# JSON / YAML / Markdown
+*.json    text eol=lf
+*.yaml    text eol=lf
+*.yml     text eol=lf
+*.md      text eol=lf
+
+# CSS / SCSS / LESS
+*.css     text eol=lf
+*.scss    text eol=lf
+*.less    text eol=lf
+
+# Python (FastAPI)
+*.py      text eol=lf
+*.pyi     text eol=lf
+
+# Configs / Scripts
+*.env     text eol=lf
+*.sh      text eol=lf
+*.bat     text eol=crlf
+
+# ==== Binary files ====
+# Don't try to normalize line endings for binaries
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.ico     binary
+*.webp    binary
+*.mp4     binary
+*.mp3     binary
+*.woff    binary
+*.woff2   binary
+*.ttf     binary
+*.eot     binary
+*.pdf     binary
+*.zip     binary
+*.tar.gz  binary
+*.sqlite  binary
+
+# ==== End-of-line normalization ====
+# Ensure proper auto conversion
+* text=auto

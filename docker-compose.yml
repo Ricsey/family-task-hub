@@ -1,0 +1,61 @@
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    env_file: ".env"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_SERVER: ${POSTGRES_SERVER}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    ports:
+      - "8000:8000"
+    entrypoint: /code/entrypoint.sh
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    env_file: ".env"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 7
+      start_period: 3s
+      timeout: 5s
+    volumes:
+      - postgres-data-prod:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file: ".env"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data-prod:/var/lib/pgadmin
+
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    entrypoint: /code/entrypoint.sh
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data-prod:
+  pgadmin-data-prod:
