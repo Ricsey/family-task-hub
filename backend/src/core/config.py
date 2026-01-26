@@ -12,13 +12,12 @@ class Settings(BaseSettings):
         env_file=".env",
         extra="ignore",
     )
+    CLERK_WEBHOOK_SECRET_KEY: str = Field(init=False)
 
     POSTGRES_DB: str = Field(init=False)
     POSTGRES_USER: str = Field(init=False)
     POSTGRES_PASSWORD: str = Field(init=False)
-    POSTGRES_SERVER: str = Field(
-        "db", init=False
-    )  # Default value for Docker setup
+    POSTGRES_SERVER: str = Field("db", init=False)  # Default value for Docker setup
     POSTGRES_PORT: str = Field("5432", init=False)
 
     @property
