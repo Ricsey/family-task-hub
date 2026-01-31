@@ -1,16 +1,18 @@
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import selectinload
-from fastapi import APIRouter, HTTPException, Response, status
 from sqlmodel import select
 
-from src.api.deps import SessionDep
-from src.models.tasks import Task, TaskCategory, TaskCreate, TaskUpdate, TaskPublic
+from src.api.deps import SessionDep, get_current_user
+from src.models.tasks import Task, TaskCategory, TaskCreate, TaskPublic, TaskUpdate
 
-router = APIRouter(prefix="/tasks", tags=["task"])
+router = APIRouter(
+    prefix="/tasks", tags=["task"], dependencies=[Depends(get_current_user)]
+)
 
 
 @router.get("/", response_model=list[TaskPublic])
 def read_tasks(session: SessionDep):
-    statement = select(Task).options(selectinload(Task.assignee)) #type: ignore
+    statement = select(Task).options(selectinload(Task.assignee))  # type: ignore
     tasks = session.exec(statement).all()
     return tasks
 
@@ -22,7 +24,9 @@ def read_categories(session: SessionDep):
 
 @router.get("/{task_id}", response_model=TaskPublic)
 def read_task(*, task_id: int, session: SessionDep):
-    statement = select(Task).options(selectinload(Task.assignee)).where(Task.id == task_id) #type: ignore
+    statement = (
+        select(Task).options(selectinload(Task.assignee)).where(Task.id == task_id)  # type: ignore
+    )
     task = session.exec(statement).first()  # Add eager loading
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -36,7 +40,9 @@ def create_task(task_in: TaskCreate, session: SessionDep):
     session.commit()
     session.refresh(task)
 
-    statement = select(Task).options(selectinload(Task.assignee)).where(Task.id == task.id) #type: ignore
+    statement = (
+        select(Task).options(selectinload(Task.assignee)).where(Task.id == task.id)  # type: ignore
+    )  # type: ignore
     task = session.exec(statement).first()
 
     return task
@@ -55,7 +61,9 @@ def update_task(*, task_id: int, task_in: TaskUpdate, session: SessionDep):
     session.refresh(db_task)
 
     # Add eager loading
-    statement = select(Task).options(selectinload(Task.assignee)).where(Task.id == task_id) #type: ignore
+    statement = (
+        select(Task).options(selectinload(Task.assignee)).where(Task.id == task_id)  # type: ignore
+    )  # type: ignore
     db_task = session.exec(statement).first()
     return db_task
 

@@ -1,12 +1,14 @@
 import uuid
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 
-from src.api.deps import SessionDep
+from src.api.deps import SessionDep, get_current_user
 from src.models.users import User, UserCreate
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(
+    prefix="/users", tags=["users"], dependencies=[Depends(get_current_user)]
+)
 
 
 @router.get("/")
