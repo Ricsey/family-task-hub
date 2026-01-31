@@ -13,6 +13,17 @@
     "ghcr.io/devcontainers-community/npm-features/prettier:1": {}
   },
   "postCreateCommand": "bash .devcontainer/setup.sh",
+  "forwardPorts": [8000, 5173],
+  "portsAttributes": {
+    "8000": {
+        "label": "Backend",
+        "onAutoForward": "openBrowser"
+      },
+    "5173": {
+      "label": "Frontend",
+      "onAutoForward": "openBrowser"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [

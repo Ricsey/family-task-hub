@@ -2,6 +2,9 @@ services:
   devcontainer:
     image: "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04"
     env_file: .env
+    ports:
+      - "8000:8000"
+      - "5173:5173"
     volumes:
       - ../:/workspaces/family-task-hub:cached
     command: sleep infinity
