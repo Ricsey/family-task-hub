@@ -1,7 +1,12 @@
 # app/webhooks/handlers.py
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from src.models.users import User
+
+
+class WebhookDataError(ValueError):
+    """Raised when incoming webhook data is invalid or incomplete."""
 
 
 def handle_user_created(db: Session, user_data: dict) -> None:
@@ -37,20 +42,41 @@ def handle_user_created(db: Session, user_data: dict) -> None:
         ... }
         >>> handle_user_created(db_session, user_data)
     """
-    clerk_id = user_data["id"]
-    email = user_data["email_addresses"][0]["email_address"]
-    first_name = user_data.get("first_name", "")
-    last_name = user_data.get("last_name", "")
+    try:
+        clerk_id = user_data.get("id")
+        if not clerk_id:
+            raise WebhookDataError("Clerk ID is missing")
 
-    full_name = f"{first_name} {last_name}".strip() if first_name or last_name else None
+        email_addresses = user_data.get("email_addresses")
+        if not email_addresses or not isinstance(email_addresses, list):
+            raise WebhookDataError("Missing or invalid email addresses")
 
-    user = User(
-        clerk_id=clerk_id,
-        email=email,
-        full_name=full_name,
-        is_active=True,
-        is_superuser=False,
-    )
+        primary_email = email_addresses[0].get("email_address")
+        if not primary_email:
+            raise WebhookDataError("Missing email address")
 
-    db.add(user)
-    db.commit()
+        first_name = user_data.get("first_name", "")
+        last_name = user_data.get("last_name", "")
+
+        full_name = (
+            f"{first_name} {last_name}".strip() if first_name or last_name else None
+        )
+
+        user = User(
+            clerk_id=clerk_id,
+            email=email_addresses,
+            full_name=full_name,
+            is_active=True,
+            is_superuser=False,
+        )
+
+        db.add(user)
+        db.commit()
+
+    except WebhookDataError:
+        db.rollback()
+        raise
+
+    except SQLAlchemyError as exc:
+        db.rollback()
+        raise RuntimeError("Database error while creating a user") from exc
