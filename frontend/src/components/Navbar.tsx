@@ -1,9 +1,10 @@
-import { useTaskModal } from "@/features/tasks/stores/taskModalStore";
 import { useAuth } from "@/features/auth";
+import { useTaskModal } from "@/features/tasks/stores/taskModalStore";
+import { UserButton } from "@clerk/clerk-react";
 import { Calendar, HomeIcon, List, PlusIcon } from "lucide-react";
 import { NavLink } from "react-router";
+import { ModeToggle } from "./ModeToggleButton";
 import { Button } from "./ui/button";
-import { UserButton } from "@clerk/clerk-react";
 
 const Navbar = () => {
 	const { openCreateModal } = useTaskModal();
@@ -62,6 +63,8 @@ const Navbar = () => {
 							<PlusIcon />
 							<span className="hidden sm:inline">Add Task</span>
 						</Button>
+
+            <ModeToggle />
 
 						{user && (
 							<div className="flex items-center gap-2">
