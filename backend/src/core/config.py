@@ -12,17 +12,17 @@ class Settings(BaseSettings):
         env_file=".env",
         extra="ignore",
     )
-    CLERK_WEBHOOK_SECRET_KEY: str = Field(init=False)
+    CLERK_WEBHOOK_SECRET_KEY: str = Field(init=False, min_length=1)
     CLERK_JWT_ISSUER: str = Field(
-        init=False
+        init=False, min_length=1
     )  # e.g., "https://your-clerk-instance.clerk.accounts.dev"
     CLERK_JWKS_URL: str = Field(
-        init=False
+        init=False, min_length=1
     )  # e.g., "https://your-clerk-instance.clerk.accounts.dev/.well-known/jwks.json"
 
-    POSTGRES_DB: str = Field(init=False)
-    POSTGRES_USER: str = Field(init=False)
-    POSTGRES_PASSWORD: str = Field(init=False)
+    POSTGRES_DB: str = Field(init=False, min_length=1)
+    POSTGRES_USER: str = Field(init=False, min_length=1)
+    POSTGRES_PASSWORD: str = Field(init=False, min_length=1)
     POSTGRES_SERVER: str = Field("db", init=False)  # Default value for Docker setup
     POSTGRES_PORT: str = Field("5432", init=False)
 
