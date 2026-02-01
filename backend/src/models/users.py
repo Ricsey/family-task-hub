@@ -15,6 +15,7 @@ class UserBase(SQLModel):
     is_active: bool = True
     is_superuser: bool = False
     clerk_id: str = Field(unique=True, index=True, max_length=255)
+    image_url: str | None = Field(default=None, max_length=500)
 
 
 class User(UserBase, table=True):

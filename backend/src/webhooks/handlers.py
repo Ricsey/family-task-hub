@@ -65,10 +65,13 @@ def handle_user_created(db: Session, user_data: dict) -> None:
             f"{first_name} {last_name}".strip() if first_name or last_name else None
         )
 
+        image_url = user_data.get("image_url")
+
         user = User(
             clerk_id=clerk_id,
             email=primary_email,
             full_name=full_name,
+            image_url=image_url,
             is_active=True,
             is_superuser=False,
         )

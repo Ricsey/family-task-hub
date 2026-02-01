@@ -134,10 +134,13 @@ def extract_user_data(clerk_user: dict) -> dict:
     last_name = clerk_user.get("last_name") or ""
     full_name = f"{first_name} {last_name}".strip() or None
 
+    image_url = clerk_user.get("image_url")
+
     return {
         "clerk_id": clerk_id,
         "email": primary_email,
         "full_name": full_name,
+        "image_url": image_url,
     }
 
 
@@ -178,6 +181,12 @@ def sync_user(
             )
             needs_update = True
 
+        if existing_user.image_url != clerk_user_data.get("image_url"):
+            changes.append(
+                f"image_url: {existing_user.image_url} -> {clerk_user_data.get('image_url')}"
+            )
+            needs_update = True
+
         if not existing_user.is_active:
             changes.append("is_active: False -> True")
             needs_update = True
@@ -186,6 +195,7 @@ def sync_user(
             if not dry_run:
                 existing_user.email = email
                 existing_user.full_name = clerk_user_data.get("full_name")
+                existing_user.image_url = clerk_user_data.get("image_url")
                 existing_user.is_active = True
                 db.add(existing_user)
             print(f"  Updated: {email} ({', '.join(changes)})")
@@ -197,6 +207,7 @@ def sync_user(
             clerk_id=clerk_id,
             email=email,
             full_name=clerk_user_data.get("full_name"),
+            image_url=clerk_user_data.get("image_url"),
             is_active=True,
             is_superuser=False,
         )
