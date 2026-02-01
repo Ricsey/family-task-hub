@@ -284,7 +284,7 @@ def sync_clerk_users(
                 stats.errors += 1
 
         if deactivate_missing:
-            print("\n🔍 Checking for users to deactivate...")
+            print("\n Checking for users to deactivate...")
             stats.deactivated = deactivate_missing_users(db, clerk_user_ids, dry_run)
 
         if not dry_run:
