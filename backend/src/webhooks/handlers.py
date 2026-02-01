@@ -86,3 +86,126 @@ def handle_user_created(db: Session, user_data: dict) -> None:
     except SQLAlchemyError as exc:
         db.rollback()
         raise RuntimeError("Database error while creating a user") from exc
+
+
+def handle_user_updated(db: Session, user_data: dict) -> None:
+    """
+    Handle the update of an existing user from Clerk webhook data.
+
+    This function processes user update webhook events from Clerk, finding the existing
+    user by Clerk ID and updating their information in the database.
+
+    Args:
+        db (Session): SQLAlchemy database session for database operations.
+        user_data (dict): Dictionary containing user data from Clerk webhook with the following structure:
+            - id (str): Clerk user ID
+            - email_addresses (list): List of email address objects, where first item contains:
+                - email_address (str): User's email address
+            - first_name (str, optional): User's first name
+            - last_name (str, optional): User's last name
+            - image_url (str, optional): User's profile image URL
+
+    Returns:
+        None
+
+    Side effects:
+        Updates the existing user in the database and commits the changes.
+
+    Raises:
+        SQLAlchemyError: If there's an error during database operations.
+        WebhookDataError: If required fields are missing or user is not found.
+
+    Example:
+        >>> user_data = {
+        ...     "id": "user_123",
+        ...     "email_addresses": [{"email_address": "newemail@example.com"}],
+        ...     "first_name": "Jane",
+        ...     "last_name": "Smith",
+        ... }
+        >>> handle_user_updated(db_session, user_data)
+    """
+    try:
+        clerk_id = user_data.get("id")
+        if not clerk_id:
+            raise WebhookDataError("Clerk ID is missing")
+
+        user = db.query(User).filter(User.clerk_id == clerk_id).first()
+        if not user:
+            raise WebhookDataError(f"User with Clerk ID {clerk_id} not found")
+
+        email_addresses = user_data.get("email_addresses")
+        if email_addresses and isinstance(email_addresses, list):
+            primary_email = email_addresses[0].get("email_address")
+            if primary_email:
+                user.email = primary_email
+
+        first_name = user_data.get("first_name")
+        last_name = user_data.get("last_name")
+        if first_name is not None or last_name is not None:
+            full_name = (
+                f"{first_name} {last_name}".strip() if first_name or last_name else None
+            )
+            user.full_name = full_name
+
+        if "image_url" in user_data:
+            user.image_url = user_data.get("image_url")
+
+        db.commit()
+
+    except WebhookDataError:
+        db.rollback()
+        raise
+
+    except SQLAlchemyError as exc:
+        db.rollback()
+        raise RuntimeError("Database error while updating user") from exc
+
+
+def handle_user_deleted(db: Session, user_data: dict) -> None:
+    """
+    Handle the deletion of a user from Clerk webhook data.
+
+    This function processes user deletion webhook events from Clerk, finding the existing
+    user by Clerk ID and marking them as inactive (soft delete).
+
+    Args:
+        db (Session): SQLAlchemy database session for database operations.
+        user_data (dict): Dictionary containing user data from Clerk webhook with the following structure:
+            - id (str): Clerk user ID
+
+    Returns:
+        None
+
+    Side effects:
+        Marks the user as inactive in the database and commits the changes.
+
+    Raises:
+        SQLAlchemyError: If there's an error during database operations.
+        WebhookDataError: If required fields are missing or user is not found.
+
+    Example:
+        >>> user_data = {
+        ...     "id": "user_123",
+        ... }
+        >>> handle_user_deleted(db_session, user_data)
+    """
+    try:
+        clerk_id = user_data.get("id")
+        if not clerk_id:
+            raise WebhookDataError("Clerk ID is missing")
+
+        user = db.query(User).filter(User.clerk_id == clerk_id).first()
+        if not user:
+            raise WebhookDataError(f"User with Clerk ID {clerk_id} not found")
+
+        user.is_active = False
+
+        db.commit()
+
+    except WebhookDataError:
+        db.rollback()
+        raise
+
+    except SQLAlchemyError as exc:
+        db.rollback()
+        raise RuntimeError("Database error while deleting user") from exc
