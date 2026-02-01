@@ -26,7 +26,10 @@ def handle_user_created(db: Session, user_data: dict) -> None:
             - last_name (str, optional): User's last name
 
     Returns:
-        None: This function doesn't return a value. It commits the new user to the database.
+        None
+
+    Side effects:
+        It commits the new user to the database.
 
     Raises:
         SQLAlchemyError: If there's an error during database operations.
