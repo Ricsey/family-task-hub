@@ -67,7 +67,7 @@ def handle_user_created(db: Session, user_data: dict) -> None:
 
         user = User(
             clerk_id=clerk_id,
-            email=email_addresses,
+            email=primary_email,
             full_name=full_name,
             is_active=True,
             is_superuser=False,
