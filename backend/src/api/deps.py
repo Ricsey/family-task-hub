@@ -62,10 +62,10 @@ def verify_clerk_token(
             detail="Invalid token issuer",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    except jwt.PyJWTError as e:
+    except jwt.PyJWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Could not validate credentials: {str(e)}",
+            detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
