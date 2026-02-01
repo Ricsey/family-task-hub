@@ -42,7 +42,7 @@ def create_task(task_in: TaskCreate, session: SessionDep):
 
     statement = (
         select(Task).options(selectinload(Task.assignee)).where(Task.id == task.id)  # type: ignore
-    )  # type: ignore
+    )
     task = session.exec(statement).first()
 
     return task
