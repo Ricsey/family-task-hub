@@ -221,7 +221,7 @@ def deactivate_missing_users(
         Number of users deactivated.
     """
     local_users = db.exec(
-        select(User).where(User.is_active == True)  # noqa: E712
+        select(User).where(User.is_active)  # noqa: E712
     ).all()
 
     deactivated = 0
