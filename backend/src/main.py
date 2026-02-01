@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.routes.tasks import router as tasks_router
 from src.api.routes.users import router as users_router
+from src.api.routes.webhooks import router as webhooks_router
 
 # from src.core.db import create_db_and_tables
 
@@ -30,3 +31,4 @@ async def healthcheck():
 
 app.include_router(users_router)
 app.include_router(tasks_router)
+app.include_router(webhooks_router)

@@ -1,5 +1,4 @@
 import { useMembers } from '@/common/hooks/useMembers';
-import { getUserColor } from '@/common/utils/userColors';
 import {
   Select,
   SelectContent,
@@ -7,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import MemberAvatar from './MemberAvatar';
 
 interface AssigneeSelectProps {
   selectedMemberId?: string;
@@ -37,7 +37,11 @@ const AssigneeSelect = ({
         {members?.map((member) => (
           <SelectItem key={member.id} value={member.id}>
             <div className="flex items-center gap-2">
-              <MemberAvatar name={member.full_name} />
+              <MemberAvatar member={member}/>
+              {/* <Avatar className="h-6 w-6">
+                <AvatarImage src={member.image_url} alt={member.full_name} />
+                <AvatarFallback>{getInitials(member.full_name)}</AvatarFallback>
+              </Avatar> */}
               <span>{member.full_name}</span>
             </div>
           </SelectItem>
@@ -48,25 +52,3 @@ const AssigneeSelect = ({
 };
 
 export default AssigneeSelect;
-
-const MemberAvatar = ({ name }: { name: string }) => {
-  const displayName = name?.trim() ? createAcronym(name) : '?';
-
-  return (
-    <div
-      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white ${getUserColor(
-        name
-      )}`}
-    >
-      {displayName}
-    </div>
-  );
-};
-
-const createAcronym = (name: string): string =>
-  name
-    .trim()
-    .split(/\s+/)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase();

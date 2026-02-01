@@ -1,6 +1,6 @@
 ## Getting started
 
-Follow these steps to start the application locally using Docker compose.  
+Follow these steps to start the application locally using Docker compose.
 This setup includes the **backend**, **frontend**, **PostgreSQL database**, and **pgAdmin**.
 
 ### Prerequisites
@@ -63,7 +63,11 @@ docker compose down -v
 
 ---
 
-## 🏗 Setup containers
+## Prequisites for authentication
+
+Follow the [Auth readme](./CLERK_AUTH_GUIDE.md).
+
+## Setup containers
 Copy the .env file to `.devcontainer/` folder.
 To avoid Memory Error `137` inside VS Code, run the builds and installations manually from your host terminal first **in the root directory**.
 
@@ -96,7 +100,7 @@ Now that the volumes are "warm," you can safely attach VS Code.
 
 ---
 
-## 🏃 Running the Apps
+## Running the Apps
 Once inside the container terminal:
 
 **Frontend:**
@@ -111,7 +115,7 @@ uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 
 ---
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 - **Permission Denied:** Run `sudo chown -R 1000:1000 .` on your host.
 - **Database Issues:** Run `docker compose down -v` to wipe volumes and restart.
 - **OOM Kill (137):** Increase Docker RAM limit to 4GB+ in Settings.

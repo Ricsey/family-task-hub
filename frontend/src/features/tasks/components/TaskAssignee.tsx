@@ -1,4 +1,4 @@
-import { getUserColor } from '@/common/utils/userColors';
+import { UserButton, useUser } from '@clerk/clerk-react';
 
 interface TaskAssigneeProps {
   name: string | null;
@@ -26,17 +26,14 @@ export const createAcronym = (str: string): string => {
 };
 
 const TaskAssignee = ({ name }: TaskAssigneeProps) => {
+  const {user} = useUser();
+
   if (!name) return null;
 
-  const colorClass = getUserColor(name);
   return (
     <div className="flex items-center gap-1.5">
-      <div
-        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white ${colorClass}`}
-      >
-        {name && createAcronym(name)}
-      </div>
-      <span className="text-sm text-stone-600">{name}</span>
+      <UserButton />
+      <span className="text-sm text-stone-600">{user?.fullName}</span>
     </div>
   );
 };
