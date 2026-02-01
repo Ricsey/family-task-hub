@@ -5,7 +5,7 @@ from svix import Webhook, WebhookVerificationError
 
 from src.api.deps import SessionDep
 from src.core.config import settings
-from src.webhooks.handlers import handle_user_created
+from src.webhooks.handlers import WebhookDataError, handle_user_created
 
 router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 
@@ -26,5 +26,11 @@ async def clerk_webhook(request: Request, session: SessionDep):
     event_type = event.get("type")
     user_data = event.get("data")
 
-    if event_type == "user.created":
-        handle_user_created(session, user_data)
+    try:
+        if event_type == "user.created":
+            handle_user_created(session, user_data)
+    except WebhookDataError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
