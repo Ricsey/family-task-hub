@@ -44,7 +44,7 @@ const TasksPage = ({ tasks, onUpdateTask, onEditTask, onDeleteTask }: TasksPageP
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold text-stone-800 mb-6">All Tasks</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">All Tasks</h1>
       <Card className="p-4 mb-6">
         <TaskFilterForm
           filterCategory={selectedCategory}

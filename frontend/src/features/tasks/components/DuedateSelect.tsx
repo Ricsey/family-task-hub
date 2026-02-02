@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
@@ -31,7 +31,7 @@ const DuedateSelect = ({
             variant="outline"
             // className="w-full justify-start text-left font-normal"
           >
-            <CalendarIcon className="mr-2 h-4 w-4 text-stone-400" />
+            <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             {/* {date ? format(date, 'PPP') : 'Pick a date'} */}
             {format(date, 'PPP')}
           </Button>

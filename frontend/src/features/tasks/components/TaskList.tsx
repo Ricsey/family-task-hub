@@ -20,8 +20,8 @@ const TasksList = ({
 }: TasksListProps) => {
   if (tasks.length === 0) {
     return (
-      <Card className="p-12 bg-white text-center">
-        <p className="text-stone-500">No tasks found matching your filters.</p>
+      <Card className="p-12 bg-card text-center">
+        <p className="text-muted-foreground">No tasks found matching your filters.</p>
         <Button
           variant="link"
           onClick={onClearFilters}
