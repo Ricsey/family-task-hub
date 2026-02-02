@@ -82,7 +82,7 @@ const DuedateSelect = ({ date, onDateChange, id }: DuedateSelectProps) => {
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogContent className="w-auto">
             <DialogHeader>
-              <DialogTitle>Select Date</DialogTitle>
+              <DialogTitle>Select Due Date</DialogTitle>
             </DialogHeader>
             <div className="flex justify-center">
               <Calendar
