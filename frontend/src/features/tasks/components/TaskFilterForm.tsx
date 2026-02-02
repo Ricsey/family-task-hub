@@ -1,11 +1,11 @@
 import { useCategories } from '@/common/hooks/useCategories';
 import { Button } from '@/components/ui/button';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from '@/components/ui/select';
 import { Filter, SortAsc, User } from 'lucide-react';
 import { memo } from 'react';
@@ -48,7 +48,7 @@ const TaskFilterForm = memo(
             onValueChange={(value) => onSelectCategory(value)}
           >
             <SelectTrigger className="w-full lg:w-45">
-              <Filter className="w-4 h-4 mr-2 text-stone-400" />
+              <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -69,7 +69,7 @@ const TaskFilterForm = memo(
             onValueChange={(value) => onSelectAssignee(value)}
           >
             <SelectTrigger className="w-full lg:w-45">
-              <User className="w-4 h-4 mr-2 text-stone-400" />
+              <User className="w-4 h-4 mr-2 text-muted-foreground" />
               <SelectValue placeholder="Assignee" />
             </SelectTrigger>
             <SelectContent>
@@ -88,7 +88,7 @@ const TaskFilterForm = memo(
           {/* Sort by */}
           <Select value={filters.sortBy} onValueChange={onSelectSortBy}>
             <SelectTrigger className="w-full lg:w-40">
-              <SortAsc className="w-4 h-4 mr-2 text-stone-400" />
+              <SortAsc className="w-4 h-4 mr-2 text-muted-foreground" />
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>

@@ -20,14 +20,14 @@ const SummaryCard = () => {
                 getCategoryColor(category).full
               }`}
             />
-            <span className="text-sm text-stone-700 min-w-20">
+            <span className="text-sm text-foreground min-w-20">
               {category}
             </span>
             <Progress
               value={percentage}
-              className={`flex-1 h-6 bg-stone-100 ${getCategoryColor(category).progress}`}
+              className={`flex-1 h-6 bg-muted ${getCategoryColor(category).progress}`}
             />
-            <span className="text-sm font-medium text-stone-600 min-w-6 text-right">
+            <span className="text-sm font-medium text-muted-foreground min-w-6 text-right">
               {count}
             </span>
           </div>

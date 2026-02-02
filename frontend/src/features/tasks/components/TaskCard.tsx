@@ -27,15 +27,14 @@ const TaskCard = memo(
     return (
       <Card
         className={`p-4 border-l-4 ${getCategoryColor(task.category).border}
-        "bg-red-400"
-      } bg-white hover:shadow-md transition-shadow duration-200 ${
+      } bg-card hover:shadow-md transition-shadow duration-200 ${
         isDone ? 'opacity-60' : ''
       }`}
       >
         <div className="flex items-start gap-3">
           {/* Checkbox */}
           <Checkbox
-            className="mt-1 border-stone-300 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
+            className="mt-1 border-border data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
             // checked={isDone}
             // onCheckedChange={onToggleStatus}
           />
@@ -46,12 +45,12 @@ const TaskCard = memo(
               <div className="flex-1">
                 <h3
                   className={`font-medium ${
-                    isDone ? 'text-stone-500 line-through' : 'text-stone-800'
+                    isDone ? 'text-muted-foreground line-through' : 'text-card-foreground'
                   }`}
                 >
                   {task.title}
                 </h3>
-                <p className="text-sm text-stone-500 mt-1 line-clamp-2">
+                <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                   {task.description}
                 </p>
               </div>

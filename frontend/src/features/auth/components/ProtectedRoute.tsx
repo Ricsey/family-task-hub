@@ -1,9 +1,9 @@
 import {
-	SignedIn,
-	SignedOut,
-	SignIn,
-	ClerkLoading,
-	ClerkLoaded,
+    ClerkLoaded,
+    ClerkLoading,
+    SignedIn,
+    SignedOut,
+    SignIn,
 } from "@clerk/clerk-react";
 import type { ReactNode } from "react";
 
@@ -15,13 +15,13 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 	return (
 		<>
 			<ClerkLoading>
-				<div className="flex justify-center items-center min-h-screen bg-gray-50">
-					<div className="text-gray-500">Loading...</div>
+				<div className="flex justify-center items-center min-h-screen bg-background">
+					<div className="text-muted-foreground">Loading...</div>
 				</div>
 			</ClerkLoading>
 			<ClerkLoaded>
 				<SignedOut>
-					<div className="flex justify-center items-center min-h-screen bg-gray-50">
+					<div className="flex justify-center items-center min-h-screen bg-background">
 						<div className="w-full max-w-md">
 							<SignIn />
 						</div>

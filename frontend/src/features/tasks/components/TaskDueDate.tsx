@@ -22,7 +22,7 @@ const TaskDueDate = ({ dueDate, isDone }: TaskDueDateProps) => {
   return (
     <div
       className={`flex items-center gap-1 text-xs ml-auto ${
-        isOverDue ? 'text-red-600' : 'text-stone-500'
+        isOverDue ? 'text-red-600 dark:text-red-400' : 'text-muted-foreground'
       }`}
     >
       <Calendar className="w-3 h-3" />

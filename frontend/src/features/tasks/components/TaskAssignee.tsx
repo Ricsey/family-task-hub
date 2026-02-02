@@ -33,7 +33,7 @@ const TaskAssignee = ({ name }: TaskAssigneeProps) => {
   return (
     <div className="flex items-center gap-1.5">
       <UserButton />
-      <span className="text-sm text-stone-600">{user?.fullName}</span>
+      <span className="text-sm text-muted-foreground">{user?.fullName}</span>
     </div>
   );
 };

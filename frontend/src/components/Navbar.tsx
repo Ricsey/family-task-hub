@@ -1,9 +1,10 @@
-import { useTaskModal } from "@/features/tasks/stores/taskModalStore";
 import { useAuth } from "@/features/auth";
+import { useTaskModal } from "@/features/tasks/stores/taskModalStore";
+import { UserButton } from "@clerk/clerk-react";
 import { Calendar, HomeIcon, List, PlusIcon } from "lucide-react";
 import { NavLink } from "react-router";
+import { ModeToggle } from "./ModeToggleButton";
 import { Button } from "./ui/button";
-import { UserButton } from "@clerk/clerk-react";
 
 const Navbar = () => {
 	const { openCreateModal } = useTaskModal();
@@ -20,7 +21,7 @@ const Navbar = () => {
 	}
 
 	return (
-		<nav className="bg-white border-b top-0 z-50">
+		<nav className="bg-background border-b top-0 z-50">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex items-center justify-between h-16">
 					{/* Logo */}
@@ -28,7 +29,7 @@ const Navbar = () => {
 						<div className="w-9 h-9 bg-teal-500 rounded-lg flex items-center justify-center">
 							<HomeIcon className="w-5 h-5 text-white" />
 						</div>
-						<span className="text-xl font-semibold text-stone-800">
+						<span className="text-xl font-semibold text-foreground">
 							Family Task Hub
 						</span>
 					</div>
@@ -42,8 +43,8 @@ const Navbar = () => {
 								className={({ isActive }) =>
 									`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
 										isActive
-											? "bg-teal-50 text-teal-700"
-											: "text-stone-600 hover:bg-stone-100 hover:text-stone-800"
+												? "bg-teal-500/10 text-teal-600 dark:text-teal-400"
+												: "text-muted-foreground hover:bg-muted hover:text-foreground"
 									}`
 								}
 							>
@@ -63,9 +64,11 @@ const Navbar = () => {
 							<span className="hidden sm:inline">Add Task</span>
 						</Button>
 
+            <ModeToggle />
+
 						{user && (
 							<div className="flex items-center gap-2">
-								<span className="hidden md:inline text-sm text-gray-700">
+								<span className="hidden md:inline text-sm text-muted-foreground">
 									{user.firstName || user.email}
 								</span>
 								<UserButton />
