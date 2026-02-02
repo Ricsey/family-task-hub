@@ -1,11 +1,12 @@
 import { useCategories } from '@/common/hooks/useCategories';
+import { useMembers } from '@/common/hooks/useMembers';
 import { Button } from '@/components/ui/button';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { Filter, SortAsc, User } from 'lucide-react';
 import { memo } from 'react';
@@ -33,6 +34,8 @@ const TaskFilterForm = memo(
     onResetFilter,
   }: TaskFilterFormProps) => {
     const { data: categories } = useCategories();
+    const { data: members, isLoading } = useMembers();
+
 
     return (
       <div className="flex flex-col">
@@ -76,12 +79,11 @@ const TaskFilterForm = memo(
               <SelectItem key="all" value="all">
                 All Members
               </SelectItem>
-              <SelectItem key="Mom" value="Mom">
-                Mom
-              </SelectItem>
-              <SelectItem key="Dad" value="Dad">
-                Dad
-              </SelectItem>
+              {members?.map((member) => (
+                <SelectItem key={member.full_name} value={member.full_name}>
+                  {member.full_name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
