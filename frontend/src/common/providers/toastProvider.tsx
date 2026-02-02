@@ -1,5 +1,8 @@
+import { useTheme } from '@/components/providers/theme-provider';
 import { Toaster } from 'sonner';
 
 export default function ToastProvider() {
-  return <Toaster position="bottom-right" richColors closeButton />;
+  const { resolvedTheme } = useTheme();
+
+  return <Toaster position="bottom-right" closeButton theme={resolvedTheme} />;
 }
