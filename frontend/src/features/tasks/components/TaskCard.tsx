@@ -1,3 +1,4 @@
+import { useMembers } from '@/common/hooks/useMembers';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { memo } from 'react';
@@ -16,7 +17,12 @@ interface TaskCardProps {
 const TaskCard = memo(({ task }: TaskCardProps) => {
     const isDone = task.status === 'completed';
     const { mutate: toggleStatus } = useToggleTaskStatus();
+    const { data: members } = useMembers();
     const handleToggle = () => toggleStatus(task);
+
+    const assignee = task.assignee_id
+      ? members?.find(member => member.id === task.assignee_id)
+      : null;
 
     return (
       <Card
@@ -58,7 +64,7 @@ const TaskCard = memo(({ task }: TaskCardProps) => {
 
             {/* Meta info */}
             <div className="flex items-center flex-wrap gap-2 mt-3 ">
-              {task.assignee && <TaskAssignee name={task.assignee.full_name} />}
+              {assignee && <TaskAssignee assignee={assignee} />}
               <TaskCategory categoryName={task.category} />
 
               {/* Recurring
