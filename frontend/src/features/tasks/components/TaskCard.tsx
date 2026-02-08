@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { memo } from 'react';
 import { getCategoryColor } from '../config/categories';
+import { useToggleTaskStatus } from '../hooks/useTasks';
 import type { Task } from '../types';
 import TaskActions from './TaskActions';
 import TaskAssignee from './TaskAssignee';
@@ -10,19 +11,12 @@ import TaskDueDate from './TaskDueDate';
 
 interface TaskCardProps {
   task: Task;
-  // onToggleStatus: () => void;
-  // onEdit: (task: Task) => void;
-  // onDelete: (taskId: string) => void;
 }
 
-const TaskCard = memo(
-  ({
-    task,
-  }: // onToggleStatus,
-  // onEdit,
-  // onDelete,
-  TaskCardProps) => {
+const TaskCard = memo(({ task }: TaskCardProps) => {
     const isDone = task.status === 'completed';
+    const { mutate: toggleStatus } = useToggleTaskStatus();
+    const handleToggle = () => toggleStatus(task);
 
     return (
       <Card
@@ -35,8 +29,8 @@ const TaskCard = memo(
           {/* Checkbox */}
           <Checkbox
             className="mt-1 border-border data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
-            // checked={isDone}
-            // onCheckedChange={onToggleStatus}
+            checked={isDone}
+            onCheckedChange={handleToggle}
           />
 
           {/* Content */}

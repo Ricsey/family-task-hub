@@ -49,6 +49,35 @@ export const useUpdateTask = () => {
   })
 }
 
+export const useToggleTaskStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (task: Task) => {
+      const newStatus = task.status === 'completed' ? 'todo' as const : 'completed' as const;
+      return taskService.update(task.id, { status: newStatus } as Partial<Task>);
+    },
+    onMutate: async (task: Task) => {
+      await queryClient.cancelQueries({ queryKey: taskKeys.lists() });
+
+      const previousTasks = queryClient.getQueryData<Task[]>(taskKeys.lists());
+
+      const newStatus = task.status === 'completed' ? 'todo' as const : 'completed' as const;
+      queryClient.setQueryData<Task[]>(taskKeys.lists(), (old) =>
+        old?.map((t) => (t.id === task.id ? { ...t, status: newStatus } : t))
+      );
+
+      return { previousTasks };
+    },
+    onError: (_err, _task, context) => {
+      queryClient.setQueryData(taskKeys.lists(), context?.previousTasks);
+      toast.error('Failed to update task status. Please try again.');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.lists() });
+    },
+  });
+};
+
 export const useDeleteTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
