@@ -8,6 +8,8 @@ services:
     volumes:
       - ../:/workspaces/family-task-hub:cached
     command: sleep infinity
+    networks:
+      - default
 
   db:
     image: postgres:17
@@ -23,6 +25,8 @@ services:
       timeout: 5s
     volumes:
       - postgres-data-dev:/var/lib/postgresql/data
+    networks:
+      - default
 
   pgadmin:
     image: dpage/pgadmin4
@@ -35,7 +39,13 @@ services:
       - db
     volumes:
       - pgadmin-data-dev:/var/lib/pgadmin
+    networks:
+      - default
 
 volumes:
   postgres-data-dev:
   pgadmin-data-dev:
+
+networks:
+  default:
+    driver: bridge
