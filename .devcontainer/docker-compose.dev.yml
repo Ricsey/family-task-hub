@@ -28,6 +28,34 @@ services:
     networks:
       - default
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    image: "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04"
+    env_file: .env
+    working_dir: /workspaces/family-task-hub/backend
+    volumes:
+      - ../:/workspaces/family-task-hub:cached
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - default
+    command: bash -c "curl -LsSf https://astral.sh/uv/install.sh | sh && /root/.local/bin/uv sync && /root/.local/bin/uv run celery -A src.tasks.email_sender worker --loglevel=info"
+      
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -45,6 +73,7 @@ services:
 volumes:
   postgres-data-dev:
   pgadmin-data-dev:
+  redis_data:
 
 networks:
   default:

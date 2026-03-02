@@ -4,6 +4,7 @@ from sqlmodel import select
 
 from src.api.deps import SessionDep, get_current_user
 from src.models.tasks import Task, TaskCategory, TaskCreate, TaskPublic, TaskUpdate
+from src.tasks.email_sender import send_email_task
 
 router = APIRouter(
     prefix="/tasks", tags=["task"], dependencies=[Depends(get_current_user)]
@@ -44,6 +45,13 @@ def create_task(task_in: TaskCreate, session: SessionDep):
         select(Task).options(selectinload(Task.assignee)).where(Task.id == task.id)  # type: ignore
     )
     task = session.exec(statement).first()
+
+    if task.assigne.email:
+        background_task = send_email_task.delay(
+            to_email=task.assignee.email,
+            subject=f"New Task Assigned: {task.title}",
+            body=f"You have been assigned a new task: {task.title}\n\nDescription: {task.description}",
+        )
 
     return task
 
