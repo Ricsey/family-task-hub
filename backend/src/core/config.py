@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     # Celery configuration
     REDIS_URL: str = Field(init=False, min_length=1)
 
+    # Email notification configuration
+    RESEND_API_KEY: str = ""
+    FROM_EMAIL: str = "noreply@familytaskhub.com"
+    EMAIL_PROVIDER: str = "console"
+
     @computed_field
     @property
     def CELERY_BROKER_URL(self) -> str:
