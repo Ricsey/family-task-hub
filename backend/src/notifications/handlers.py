@@ -24,7 +24,6 @@ def _user_has_email_enabled(user_id: str) -> bool:
 
 
 def handle_task_assignee_changed(payload: dict) -> None:
-    task_id = payload["task_id"]
     task_title = payload["task_title"]
     task_category = payload["task_category"]
     task_due_date = payload["task_due_date"]
