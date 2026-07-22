@@ -61,6 +61,11 @@ def delete_user(user_id: str, session: SessionDep):
     return {"ok": True}
 
 
+@router.get("/me/notification-preference")
+def get_notification_preference(current_user: CurrentUserDep):
+    return {"email_notifications_enabled": current_user.email_notifications_enabled}
+
+
 @router.patch("/me/notification-preference")
 def update_notification_preference(
     pref_in: NotificationPreferenceUpdate,
