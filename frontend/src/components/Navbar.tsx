@@ -1,7 +1,7 @@
 import { useAuth } from "@/features/auth";
 import { useTaskModal } from "@/features/tasks/stores/taskModalStore";
 import { UserButton } from "@clerk/clerk-react";
-import { Calendar, HomeIcon, List, Menu, PlusIcon } from "lucide-react";
+import { Calendar, HomeIcon, List, Menu, PlusIcon, Settings } from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router";
 import { ModeToggle } from "./ModeToggleButton";
@@ -23,6 +23,7 @@ const Navbar = () => {
 		{ path: "/dashboard", label: "Dashboard", icon: HomeIcon },
 		{ path: "/tasks", label: "Tasks", icon: List },
 		{ path: "/calendar", label: "Calendar", icon: Calendar },
+		{ path: "/settings", label: "Settings", icon: Settings },
 	];
 
 	if (!isLoaded) {
