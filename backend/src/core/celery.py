@@ -9,6 +9,7 @@ celery = Celery(
 )
 
 celery.conf.update(
+    imports=["src.notifications.celery_tasks"],
     task_serializer=settings.CELERY_TASK_SERIALIZER,
     result_serializer=settings.CELERY_RESULT_SERIALIZER,
     accept_content=settings.CELERY_ACCEPT_CONTENT,
