@@ -1,6 +1,10 @@
 import json
 import logging
+import os
+import socket
 import time
+
+import redis
 
 from src.notifications.handlers import handle_task_assignee_changed
 from src.notifications.stream import redis_client
@@ -9,13 +13,13 @@ logger = logging.getLogger(__name__)
 
 STREAM_NAME = "task_events"
 GROUP_NAME = "notification-consumers"
-CONSUMER_NAME = "consumer-1"
+CONSUMER_NAME = f"{socket.gethostname()}-{os.getpid()}"
 
 
 def _ensure_consumer_group():
     try:
         redis_client.xgroup_create(STREAM_NAME, GROUP_NAME, id="0", mkstream=True)
-    except Exception:
+    except redis.exceptions.ResponseError:
         logger.info("Consumer group already exists (or created)")
 
 
