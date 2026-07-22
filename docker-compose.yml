@@ -16,6 +16,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
   db:
     image: postgres:17
@@ -32,6 +34,31 @@ services:
       timeout: 5s
     volumes:
       - postgres-data-prod:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
+      start_period: 3s
+      timeout: 3s
+    volumes:
+      - redis-data:/data
+
+  event-consumer:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    env_file: ".env"
+    entrypoint: ["uv", "run", "python", "-m", "src.notifications.consumer"]
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
 
   pgadmin:
     image: dpage/pgadmin4
@@ -59,3 +86,4 @@ services:
 volumes:
   postgres-data-prod:
   pgadmin-data-prod:
+  redis-data:
