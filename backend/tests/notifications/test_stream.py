@@ -24,6 +24,7 @@ def test_task_assignee_changed_event_has_required_fields():
         new_assignee_id="550e8400-e29b-41d4-a716-446655440000",
         new_assignee_email="user@example.com",
         new_assignee_name="John",
+        actor_id="actor-1",
         actor_name="Alice",
     )
     assert event.task_id == 1

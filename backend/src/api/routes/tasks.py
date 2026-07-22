@@ -36,9 +36,7 @@ def read_task(*, task_id: int, session: SessionDep):
 
 
 @router.post("/", status_code=201, response_model=TaskPublic)
-def create_task(
-    task_in: TaskCreate, session: SessionDep, current_user: CurrentUserDep
-):
+def create_task(task_in: TaskCreate, session: SessionDep, current_user: CurrentUserDep):
     task = Task.model_validate(task_in)
     session.add(task)
     session.commit()
@@ -61,6 +59,7 @@ def create_task(
                 new_assignee_id=str(task.assignee_id),
                 new_assignee_email=task.assignee.email if task.assignee else None,
                 new_assignee_name=task.assignee.full_name if task.assignee else None,
+                actor_id=str(current_user.id),
                 actor_name=current_user.full_name or current_user.email,
             )
             publish_event("task.assignee_changed", event.model_dump())
@@ -70,7 +69,11 @@ def create_task(
 
 @router.patch("/{task_id}", response_model=TaskPublic)
 def update_task(
-    *, task_id: int, task_in: TaskUpdate, session: SessionDep, current_user: CurrentUserDep
+    *,
+    task_id: int,
+    task_in: TaskUpdate,
+    session: SessionDep,
+    current_user: CurrentUserDep,
 ):
     db_task = session.get(Task, task_id)
     if not db_task:
@@ -95,7 +98,8 @@ def update_task(
     new_assignee_name = db_task.assignee.full_name if db_task.assignee else None
 
     if old_assignee_id != new_assignee_id:
-        if new_assignee_id and new_assignee_id != str(current_user.id):
+        # if new_assignee_id and new_assignee_id != str(current_user.id):
+        if new_assignee_id:
             event = TaskAssigneeChangedEvent(
                 task_id=task_id,
                 task_title=db_task.title,
@@ -106,10 +110,12 @@ def update_task(
                 new_assignee_id=new_assignee_id,
                 new_assignee_email=new_assignee_email,
                 new_assignee_name=new_assignee_name,
+                actor_id=str(current_user.id),
                 actor_name=current_user.full_name or current_user.email,
             )
             publish_event("task.assignee_changed", event.model_dump())
-        elif old_assignee_id and old_assignee_id != str(current_user.id):
+        # elif old_assignee_id and old_assignee_id != str(current_user.id):
+        elif old_assignee_id:
             event = TaskAssigneeChangedEvent(
                 task_id=task_id,
                 task_title=db_task.title,
@@ -120,6 +126,7 @@ def update_task(
                 new_assignee_id=None,
                 new_assignee_email=None,
                 new_assignee_name=None,
+                actor_id=str(current_user.id),
                 actor_name=current_user.full_name or current_user.email,
             )
             publish_event("task.assignee_changed", event.model_dump())

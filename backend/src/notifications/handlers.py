@@ -1,8 +1,10 @@
 import logging
+import uuid
 
 from sqlmodel import Session, select
 
 from src.core.db import engine
+from src.models.tasks import Task  # noqa: F401
 from src.models.users import User
 from src.notifications.celery_tasks import send_notification_email
 from src.notifications.templates import (
@@ -15,9 +17,7 @@ logger = logging.getLogger(__name__)
 
 def _user_has_email_enabled(user_id: str) -> bool:
     with Session(engine) as session:
-        user = session.exec(
-            select(User).where(User.id == user_id)
-        ).first()
+        user = session.exec(select(User).where(User.id == uuid.UUID(user_id))).first()
         if user is None:
             return False
         return user.email_notifications_enabled
@@ -27,6 +27,7 @@ def handle_task_assignee_changed(payload: dict) -> None:
     task_title = payload["task_title"]
     task_category = payload["task_category"]
     task_due_date = payload["task_due_date"]
+    actor_id = payload.get("actor_id")
     actor_name = payload["actor_name"]
 
     new_assignee_id = payload.get("new_assignee_id")
@@ -35,6 +36,7 @@ def handle_task_assignee_changed(payload: dict) -> None:
     previous_assignee_email = payload.get("previous_assignee_email")
 
     if new_assignee_id and new_assignee_id != previous_assignee_id:
+        # if new_assignee_id != actor_id and _user_has_email_enabled(new_assignee_id):
         if _user_has_email_enabled(new_assignee_id):
             html = render_assigned_email(
                 task_title=task_title,
@@ -49,7 +51,9 @@ def handle_task_assignee_changed(payload: dict) -> None:
             )
 
     if previous_assignee_id and previous_assignee_id != new_assignee_id:
-        if _user_has_email_enabled(previous_assignee_id):
+        if previous_assignee_id != actor_id and _user_has_email_enabled(
+            previous_assignee_id
+        ):
             html = render_unassigned_email(
                 task_title=task_title,
                 task_category=task_category,

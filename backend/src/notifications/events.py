@@ -11,4 +11,5 @@ class TaskAssigneeChangedEvent(BaseModel):
     new_assignee_id: str | None
     new_assignee_email: str | None
     new_assignee_name: str | None
+    actor_id: str
     actor_name: str
