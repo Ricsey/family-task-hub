@@ -1,4 +1,3 @@
-import asyncio
 import logging
 
 from src.core.celery import celery
@@ -11,7 +10,7 @@ logger = logging.getLogger(__name__)
 def send_notification_email(self, to_email: str, subject: str, html_body: str):
     try:
         provider = get_email_provider()
-        asyncio.run(provider.send_email(to=to_email, subject=subject, body=html_body))
+        provider.send_email(to=to_email, subject=subject, body=html_body)
     except Exception as e:
         logger.error("Failed to send notification email to %s: %s", to_email, e)
         raise self.retry(exc=e)

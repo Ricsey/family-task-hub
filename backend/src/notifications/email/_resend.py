@@ -12,12 +12,12 @@ class ResendEmailProvider(EmailProvider):
     def __init__(self) -> None:
         resend.api_key = settings.RESEND_API_KEY
 
-    async def send_email(self, to: str, subject: str, body: str) -> None:
+    def send_email(self, to: str, subject: str, body: str) -> None:
         params: resend.Emails.SendParams = {
             "from": settings.FROM_EMAIL,
             "to": [to],
             "subject": subject,
-            "text": body,
+            "html": body,
         }
         email = resend.Emails.send(params)
         logger.info("Email sent to %s (id=%s)", to, email["id"])

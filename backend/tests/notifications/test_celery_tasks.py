@@ -8,7 +8,7 @@ os.environ.setdefault("POSTGRES_USER", "test")
 os.environ.setdefault("POSTGRES_PASSWORD", "test")
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")
 
-from unittest.mock import AsyncMock, patch
+from unittest.mock import Mock, patch
 
 from src.notifications.celery_tasks import send_notification_email
 
@@ -17,7 +17,7 @@ class TestSendNotificationEmail:
     @patch("src.notifications.celery_tasks.get_email_provider")
     def test_sends_email_via_provider(self, mock_get_provider):
         mock_provider = mock_get_provider.return_value
-        mock_provider.send_email = AsyncMock()
+        mock_provider.send_email = Mock()
 
         send_notification_email("test@example.com", "Subject", "<p>Body</p>")
 
