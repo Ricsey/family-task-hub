@@ -1,10 +1,15 @@
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlmodel import select
 
-from src.api.deps import SessionDep, get_current_user
+from src.api.deps import CurrentUserDep, SessionDep, get_current_user
 from src.models.users import User, UserCreate
+
+
+class NotificationPreferenceUpdate(BaseModel):
+    email_notifications_enabled: bool
 
 router = APIRouter(
     prefix="/users", tags=["users"], dependencies=[Depends(get_current_user)]
@@ -54,3 +59,17 @@ def delete_user(user_id: str, session: SessionDep):
     session.delete(user)
     session.commit()
     return {"ok": True}
+
+
+@router.patch("/me/notification-preference")
+def update_notification_preference(
+    pref_in: NotificationPreferenceUpdate,
+    session: SessionDep,
+    current_user: CurrentUserDep,
+):
+    user = session.get(User, current_user.id)
+    user.email_notifications_enabled = pref_in.email_notifications_enabled
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return {"email_notifications_enabled": user.email_notifications_enabled}
