@@ -4,6 +4,7 @@ import { AuthLayout } from "./features/auth";
 import MainLayout from "./features/tasks/layouts/mainLayout";
 import TasksDashboard from "./features/tasks/pages/TasksDashboard";
 import TasksPage from "./features/tasks/pages/TasksPage";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 					<Route path="tasks" element={<TasksPage />} />
 					<Route path="calendar" element={<div>Calendar - Coming Soon</div>} />
 					<Route path="dashboard" element={<TasksDashboard />} />
+					<Route path="settings" element={<SettingsPage />} />
 				</Route>
 			</Route>
 
