@@ -60,6 +60,34 @@ services:
       db:
         condition: service_healthy
 
+  celery-worker:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    env_file: ".env"
+    command: uv run celery -A src.core.celery worker --loglevel=info
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MP_UI_BIND_ADDR: 0.0.0.0:8025
+      MP_SMTP_BIND_ADDR: 0.0.0.0:1025
+
   pgadmin:
     image: dpage/pgadmin4
     env_file: ".env"

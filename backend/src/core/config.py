@@ -35,7 +35,11 @@ class Settings(BaseSettings):
     # Email notification configuration
     RESEND_API_KEY: str = ""
     FROM_EMAIL: str = "noreply@familytaskhub.com"
-    EMAIL_PROVIDER: str = "console"
+    EMAIL_PROVIDER: str = "mailpit"
+
+    # SMTP configuration (used by mailpit provider)
+    SMTP_HOST: str = "mailpit"
+    SMTP_PORT: int = 1025
 
     @computed_field
     @property

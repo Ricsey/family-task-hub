@@ -15,5 +15,9 @@ def test_notification_config_vars_have_defaults():
     assert hasattr(settings, "RESEND_API_KEY")
     assert hasattr(settings, "FROM_EMAIL")
     assert hasattr(settings, "EMAIL_PROVIDER")
+    assert hasattr(settings, "SMTP_HOST")
+    assert hasattr(settings, "SMTP_PORT")
     assert settings.FROM_EMAIL == "noreply@familytaskhub.com"
-    assert settings.EMAIL_PROVIDER == "console"
+    assert settings.EMAIL_PROVIDER == "mailpit"
+    assert settings.SMTP_HOST == "mailpit"
+    assert settings.SMTP_PORT == 1025
